@@ -1,37 +1,29 @@
 import Image from 'next/image'
-import { useSignIn, useAuthStateChange } from 'react-supabase'
+import { useSignUp, useAuthStateChange } from 'react-supabase'
 import React from 'react';
 
-
-
-
-
-
 export default function Home() {
-  const [{ error, fetching, session, user }, signIn] = useSignIn()
+  const [{ error, fetching, session, user }, signUp] = useSignUp()
   
   const [password, setPassword] = React.useState<string>('')
   const [email, setEmail] = React.useState<string>('')
   const [passwordVisble, setPasswordVisble] = React.useState<boolean>(false)
 
 
-  async function onClickSignIn() {
-    const { error, session, user } = await signIn({
+  async function onClickSignUp() {
+    const { error, session, user } = await signUp({
       email: email,
       password: password,
     })
   }
 
-  
 
-  if (error) return <div>Error signing in</div>
-  if (fetching) return <div>Signing in</div>
-  if (user) return <div>Logged in</div>
+  if (error) return <div>Error signing up</div>
+  if (fetching) return <div>Signing up</div>
+  if (user) return <div>Welcome user</div>
 
   return (
     <div >
-
-
       <div className="relative mt-2 rounded-md shadow-sm m-9">
         <label htmlFor='username'>Email</label>
         <div className="relative mt-2 rounded-md shadow-sm">
@@ -64,11 +56,8 @@ export default function Home() {
 
 
       <div className='mt-3 mx-9'>
-        <button onClick={onClickSignIn}
-        className="inline-flex items-center m-3 px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
 
-      >Sign in</button>
-        <button onClick={onClickSignIn}
+        <button onClick={onClickSignUp}
           className="inline-flex items-center m-3 px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
 
         >Sign Up</button>
