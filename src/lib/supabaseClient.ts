@@ -15,6 +15,11 @@ export function signIn(
   return client.auth.signInWithPassword({ email, password });
 }
 
+
+
+
+
+
 export function getArticle(client: SupabaseClient, article_id: number) {
   return client.from("article").select<string, Article>("*").eq(
     "id",
@@ -142,7 +147,7 @@ export function highlightSummaryFunction(
 
   interface HighlightSummaryReturn {
     summary: string;
-    query: number;
+    query_id: number;
   }
   return client.functions.invoke<HighlightSummaryReturn>("summarise_highlight", {
     body: JSON.stringify({
@@ -152,6 +157,29 @@ export function highlightSummaryFunction(
     }),
   });
 }
+
+
+
+
+export function highlightQuestionFunction(
+  client: SupabaseClient, 
+  highlight_id: number,
+  question: string,
+){
+
+  interface HighlightQuestionReturn {
+    answer: string;
+    query_id: number;
+  }
+  return client.functions.invoke<HighlightQuestionReturn>("question_highlight", {
+    body: JSON.stringify({
+      highlight_id: highlight_id,
+      question: question,
+    }),
+  });
+}
+
+
 
 export function getAllHighlightSummary(
   client: SupabaseClient,
