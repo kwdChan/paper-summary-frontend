@@ -10,7 +10,6 @@ export interface Article {
 export interface Highlight {
     id: number,
     created_at: string,
-    article_id: number,
     text: string
     user_id: string,
     article_digest: string, 
@@ -18,7 +17,7 @@ export interface Highlight {
 }
 
 
-export interface Highlight_query {
+export interface HighlightQuery {
     id: number,
     created_at: string
     highlight_id: number
@@ -28,8 +27,11 @@ export interface Highlight_query {
     user_id: string,
 }
 
+
+
 export type SummaryType = "One sentence"|"Argments and count-arguments"| "Main findings"
 
 export const allSummaryType: SummaryType[] = [
     "One sentence", "Argments and count-arguments", "Main findings"
 ]
+

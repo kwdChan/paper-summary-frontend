@@ -1,32 +1,36 @@
 import Image from 'next/image'
-import { useSignIn, useAuthStateChange } from 'react-supabase'
+import {signIn, supabaseClient} from  '@/lib/supabaseClient'
 import React from 'react';
 
-
-
-
-
-
 export default function Home() {
-  const [{ error, fetching, session, user }, signIn] = useSignIn()
   
   const [password, setPassword] = React.useState<string>('')
   const [email, setEmail] = React.useState<string>('')
   const [passwordVisble, setPasswordVisble] = React.useState<boolean>(false)
 
+  const [user, setUser] = React.useState<any>(null)
+  const [error, setError] = React.useState<any>(null)
 
   async function onClickSignIn() {
-    const { error, session, user } = await signIn({
-      email: email,
-      password: password,
-    })
+    const result = await signIn(
+      supabaseClient, 
+      email,
+      password,
+    )
+
+    if (result.data) setUser(result.data)
+    if (result.error) setError(result.error)
+    console.log(result)
+    console.log(error)
   }
 
+
+  if (user) return <div>Welcome user</div>
+
+  
   
 
-  if (error) return <div>Error signing in</div>
-  if (fetching) return <div>Signing in</div>
-  if (user) return <div>Logged in</div>
+
 
   return (
     <div >

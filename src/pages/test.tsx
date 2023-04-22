@@ -1,19 +1,18 @@
 import { NavIcon } from "@/components/navIcon";
-import { Article, Highlight_query } from "@/utils/types";
+import { Article, HighlightQuery } from "@/lib/types";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
-import { useRealtime, useClient } from "react-supabase";
-import {highlightSummaryFunction, getAllHighlightSummary} from "@/utils/functions"
+
+import {supabaseClient, getAllHighlightSummary} from "@/lib/supabaseClient"
 
 export default function Page() {
   //const [{ data, error, fetching }, reexecute] = useRealtime<Article>('article')
   //const router = useRouter()
 
   const [data, setData] = React.useState<any>(null);
-  const client = useClient();
 
   function test() {
-    getAllHighlightSummary(client, 12).then(
+    getAllHighlightSummary(supabaseClient, 12).then(
         ({data, error}) => {
           console.log(data, error);
           setData(data);
