@@ -3,7 +3,7 @@ import { Article } from "@/lib/types";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 //import { useRealtime } from 'react-supabase'
-import { supabaseClient, monitorArticleList} from "@/lib/supabaseClient";
+import { supabaseClient, monitorArticleList } from "@/lib/supabaseClient";
 
 export default function Page() {
   //const [{ data, error, fetching }, reexecute] = useRealtime<Article>('article')
@@ -11,7 +11,7 @@ export default function Page() {
   const [aricleList, setArticleList] = React.useState<Article[]>([]);
 
   useEffect(() => {
-    monitorArticleList(supabaseClient, setArticleList)
+    monitorArticleList(supabaseClient, setArticleList);
   }, []);
 
   const router = useRouter();
@@ -31,7 +31,7 @@ export default function Page() {
             key={article.id}
             className="hover:bg-slate-200 hover:cursor-pointer"
             onClick={() => {
-              router.push(`/article/${article.id}`);
+              router.push(`/article/${article.digest}`);
             }}
           >
             {article.title}

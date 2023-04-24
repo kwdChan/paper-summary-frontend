@@ -1,8 +1,10 @@
 import Image from 'next/image'
 import {signIn, supabaseClient} from  '@/lib/supabaseClient'
 import React from 'react';
+import { useRouter } from 'next/router';
 
 export default function Home() {
+  const router = useRouter()
   
   const [password, setPassword] = React.useState<string>('')
   const [email, setEmail] = React.useState<string>('')
@@ -25,7 +27,10 @@ export default function Home() {
   }
 
 
-  if (user) return <div>Welcome user</div>
+  if (user) {
+    router.push('/article')
+
+  }
 
   
   

@@ -1,7 +1,7 @@
 import { Menu, Transition } from "@headlessui/react";
 import { Fragment, useEffect, useRef, useState } from "react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
-import { Highlight } from "@/utils/types";
+import { Highlight } from "@/lib/types";
 
 
 
@@ -91,7 +91,8 @@ export function NavIconWithScopeSwitcher({
 
 export function NavIcon({}) {
   return (
-    <div className="fixed top-3 right-3 text-right">
+    <div className="fixed top-3 right-3 text-right z-50">
+
       <Menu as="div" className="relative inline-block text-left">
         <MenuEntrance />
 

@@ -85,7 +85,7 @@ function QuestionAnswerTab({
           .filter((data) => data.type === "question")
           .map((data, idx) => (
 
-            <MyDisclosure title={data.query} content={data.answer} />
+            <MyDisclosure key={idx} title={data.query} content={data.answer} />
 
 
           ))}
@@ -347,7 +347,8 @@ function TabNav({
 
 export default function DataHolder() {
   const router = useRouter();
-  const { article_id, highlight_id } = router.query;
+  const { article_digest, highlight_digest } = router.query;
+  console.log("DataHolder: router.query", router.query)
   const [article, setArticle] = useState<Article>({
     id: -1,
     user_id: "placeholder",
@@ -367,8 +368,8 @@ export default function DataHolder() {
   >([]);
 
   useEffect(() => {
-    if (typeof article_id === "string") {
-      getArticle(supabaseClient, parseInt(article_id)).then(
+    if (typeof article_digest === "string") {
+      getArticle(supabaseClient, article_digest).then(
         ({ data, error }) => {
           if (error) {
             console.log(error);
@@ -378,27 +379,26 @@ export default function DataHolder() {
         }
       );
     }
-  }, [article_id]);
+  }, [article_digest]);
 
   useEffect(() => {
     if (article.digest === "placeholder") return;
     monitorHighlightsOfArticle(supabaseClient, article.digest, setHighlights);
-    console.log("highlights", highlights);
+    console.log("DataHolder:highlights", highlights)
   }, [article.digest]);
 
+
   useEffect(() => {
-    if (typeof highlight_id === "string") {
-      getHighlight(supabaseClient, parseInt(highlight_id)).then(
-        ({ data, error }) => {
-          if (error) {
-            console.log(error);
-            return;
+    if (typeof highlight_digest === "string") {
+
+      highlights.forEach((eachHighlight) => {
+          if (eachHighlight.digest===highlight_digest){
+            setSelectedHighlight(eachHighlight);
           }
-          setSelectedHighlight(data);
-        }
-      );
+      }
+      )
     }
-  }, [highlight_id]);
+  }, [highlights, highlight_digest]);
 
   useEffect(() => {
     if (selectedHighlight) {
@@ -416,11 +416,19 @@ export default function DataHolder() {
         <NavIcon />
       </header>
 
-      <div className="bg-blue-500 text-white h-14">
-        <b>{article.title}</b>
-        <br />
-        Focus: {highlight_id || "None"}
+      <div className=" bg-blue-500 text-white h-14 w-screen overflow-ellipsis">
+        <div className= "h-6 overflow-clip w-11/12">
+          <b>{article.title}</b>
+        </div>
+        <div className="absolute right-0 top-0 w-5/12 h-6 bg-gradient-to-r from-transparent to-blue-500">
+        </div>
+
+
+        Focus: {highlight_digest || "None"}
+
+
       </div>
+      
       <TabNav
         article={article}
         highlights={highlights}

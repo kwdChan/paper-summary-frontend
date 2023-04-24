@@ -20,10 +20,10 @@ export function signIn(
 
 
 
-export function getArticle(client: SupabaseClient, article_id: number) {
+export function getArticle(client: SupabaseClient, article_digest: string) {
   return client.from("article").select<string, Article>("*").eq(
-    "id",
-    article_id,
+    "digest",
+    article_digest,
   ).single();
 }
 
@@ -190,3 +190,5 @@ export function getAllHighlightSummary(
     highlight_id,
   );
 }
+
+
