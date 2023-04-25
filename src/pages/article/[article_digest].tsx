@@ -1,6 +1,5 @@
-import { Disclosure } from '@headlessui/react'
-import { ChevronUpIcon } from '@heroicons/react/20/solid'
-
+import { Disclosure } from "@headlessui/react";
+import { ChevronUpIcon } from "@heroicons/react/20/solid";
 import { useRouter } from "next/router";
 import {
   Article,
@@ -23,33 +22,31 @@ import {
   getHighlight,
   monitorHighlightQueries,
   highlightSummaryFunction,
-  highlightQuestionFunction
+  highlightQuestionFunction,
 } from "@/lib/supabaseClient";
+import React from "react";
 
-
-function MyDisclosure({title, content}:{title: string, content: string}){
-
+function MyDisclosure({ title, content }: { title: string; content: string }) {
   return (
-  <Disclosure>
-          {({ open }) => (
-            <>
-              <Disclosure.Button className="flex w-full justify-between rounded-lg bg-purple-100 px-4 py-2 text-left text-sm font-medium text-purple-900 hover:bg-purple-200 focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75">
-                <span>{title}</span>
-                <ChevronUpIcon
-                  className={`${
-                    open ? 'rotate-180 transform' : ''
-                  } h-5 w-5 text-purple-500`}
-                />
-              </Disclosure.Button>
-              <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500">
-                {content}
-              </Disclosure.Panel>
-            </>
-          )}
-        </Disclosure>)
+    <Disclosure>
+      {({ open }) => (
+        <>
+          <Disclosure.Button className="flex w-full justify-between rounded-lg bg-purple-100 px-4 py-2 text-left text-sm font-medium text-purple-900 hover:bg-purple-200 focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75">
+            <span>{title}</span>
+            <ChevronUpIcon
+              className={`${
+                open ? "rotate-180 transform" : ""
+              } h-5 w-5 text-purple-500`}
+            />
+          </Disclosure.Button>
+          <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500">
+            {content}
+          </Disclosure.Panel>
+        </>
+      )}
+    </Disclosure>
+  );
 }
-
-
 
 function QuestionAnswerTab({
   article,
@@ -65,17 +62,24 @@ function QuestionAnswerTab({
   const [question, setQuestion] = useState<string>("");
 
   const sendQuestion = () => {
-    if (!selectedHighlight) {console.log('no highlight selected'); return};
-
+    if (!selectedHighlight) {
+      console.log("no highlight selected");
+      return;
+    }
 
     console.log(question);
 
-    highlightQuestionFunction(supabaseClient, selectedHighlight.id, question).then(
-      (result) => {
-        if (result.error) {console.log( result); return}
-        console.log("answer", result.data?.answer);
+    highlightQuestionFunction(
+      supabaseClient,
+      selectedHighlight.id,
+      question
+    ).then((result) => {
+      if (result.error) {
+        console.log(result);
+        return;
       }
-    )
+      console.log("answer", result.data?.answer);
+    });
   };
 
   return (
@@ -84,14 +88,8 @@ function QuestionAnswerTab({
         {selectedHighlightSummaries
           .filter((data) => data.type === "question")
           .map((data, idx) => (
-
             <MyDisclosure key={idx} title={data.query} content={data.answer} />
-
-
           ))}
-
-
-
       </div>
 
       <div className=" focus:outline-none absolute bottom-0 left-0 w-full border-t md:border-t-0 dark:border-white/20 md:border-transparent md:dark:border-transparent md:bg-vert-light-gradient bg-white dark:bg-gray-800 md:!bg-transparent dark:md:bg-vert-dark-gradient pt-2">
@@ -131,8 +129,10 @@ function SummaryTab({
     summaryModeList[0]
   );
   const [summaryResponse, setSummaryResponse] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
 
   const onSelection = (selectedMode: SummaryType) => {
+    //TODO: show warning message
     if (!selectedHighlight) return;
 
     setselectedSummaryMode(selectedMode);
@@ -150,11 +150,13 @@ function SummaryTab({
     console.log(selectedHighlightSummaries);
 
     //TODO: (add a allow user to generate the response)
+    setLoading(true);
     highlightSummaryFunction(
       supabaseClient,
       selectedHighlight.id,
       selectedMode
     ).then(({ data, error }) => {
+      setLoading(false);
       if (error) {
         console.log(error);
         return;
@@ -166,7 +168,7 @@ function SummaryTab({
     <>
       <Listbox
         as="div"
-        className="w-72 mt-5"
+        className="w-10/12 mt-5 mx-auto"
         value={selectedSummaryMode}
         onChange={onSelection}
       >
@@ -185,7 +187,7 @@ function SummaryTab({
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+          <Listbox.Options className="absolute mt-1 max-h-60 w-10/12 overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
             {summaryModeList.map((summaryMode, idx) => (
               <Listbox.Option
                 key={idx}
@@ -218,7 +220,13 @@ function SummaryTab({
         </Transition>
       </Listbox>
 
-      <div className="w-full px-0">{summaryResponse}</div>
+      <div className="w-full  p-7">
+        {summaryResponse.split("\n").map((line, idx) => (
+          <p className="my-3" key={idx}>
+            {line}
+          </p>
+        ))}
+      </div>
     </>
   );
 }
@@ -235,8 +243,8 @@ function IndexTab({
   setSelectedHighlight: Dispatch<SetStateAction<Highlight | null>>;
 }) {
   return (
-    <div className="w-full px-0">
-      <h2 className="text-xl font-semibold">Highlights: </h2>
+    <div className="w-full  p-7">
+      <h2 className="text-xl font-semibold ">Highlights: </h2>
 
       <ol>
         {highlights.map((highlight) => (
@@ -252,8 +260,8 @@ function IndexTab({
       <br></br>
       <br></br>
 
-      <h2 className="text-xl font-semibold">Selected: </h2>
-      {selectedHighlight?.text}
+      <h2 className="text-xl font-semibold ">Selected: </h2>
+      <p>{selectedHighlight?.text}</p>
     </div>
   );
 }
@@ -348,7 +356,13 @@ function TabNav({
 export default function DataHolder() {
   const router = useRouter();
   const { article_digest, highlight_digest } = router.query;
-  console.log("DataHolder: router.query", router.query)
+
+  const [uiData, setUiData] = useState<any>({
+    summary: { loading: false, highlight_digest: null },
+    question: {},
+  });
+
+  console.log("DataHolder: router.query", router.query);
   const [article, setArticle] = useState<Article>({
     id: -1,
     user_id: "placeholder",
@@ -369,34 +383,29 @@ export default function DataHolder() {
 
   useEffect(() => {
     if (typeof article_digest === "string") {
-      getArticle(supabaseClient, article_digest).then(
-        ({ data, error }) => {
-          if (error) {
-            console.log(error);
-            return;
-          }
-          setArticle(data);
+      getArticle(supabaseClient, article_digest).then(({ data, error }) => {
+        if (error) {
+          console.log(error);
+          return;
         }
-      );
+        setArticle(data);
+      });
     }
   }, [article_digest]);
 
   useEffect(() => {
     if (article.digest === "placeholder") return;
     monitorHighlightsOfArticle(supabaseClient, article.digest, setHighlights);
-    console.log("DataHolder:highlights", highlights)
+    console.log("DataHolder:highlights", highlights);
   }, [article.digest]);
-
 
   useEffect(() => {
     if (typeof highlight_digest === "string") {
-
       highlights.forEach((eachHighlight) => {
-          if (eachHighlight.digest===highlight_digest){
-            setSelectedHighlight(eachHighlight);
-          }
-      }
-      )
+        if (eachHighlight.digest === highlight_digest) {
+          setSelectedHighlight(eachHighlight);
+        }
+      });
     }
   }, [highlights, highlight_digest]);
 
@@ -411,24 +420,21 @@ export default function DataHolder() {
   }, [selectedHighlight]);
 
   return (
-    <div>
+    <div className="w-screen h-screen  overflow-x-hidden overflow-y-scroll scroll">
       <header>
         <NavIcon />
       </header>
 
-      <div className=" bg-blue-500 text-white h-14 w-screen overflow-ellipsis">
-        <div className= "h-6 overflow-clip w-11/12">
+      <div className="relative bg-blue-500 text-white h-14 w-screen overflow-ellipsis p-1">
+        <div className="h-6 overflow-clip w-11/12">
           <b>{article.title}</b>
+
         </div>
-        <div className="absolute right-0 top-0 w-5/12 h-6 bg-gradient-to-r from-transparent to-blue-500">
-        </div>
 
+        <div className="absolute  right-0 top-0 w-5/12 h-14 bg-gradient-to-r from-transparent to-blue-500"></div>
 
-        Focus: {highlight_digest || "None"}
-
-
+        Focus: {selectedHighlight?.digest || "None"}
       </div>
-      
       <TabNav
         article={article}
         highlights={highlights}
