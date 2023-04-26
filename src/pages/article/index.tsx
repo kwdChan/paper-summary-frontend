@@ -3,7 +3,7 @@ import { Article } from "@/lib/types";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 //import { useRealtime } from 'react-supabase'
-import { supabaseClient, monitorArticleList } from "@/lib/supabaseClient";
+import { supabaseClient} from "@/lib/supabaseClient";
 
 export default function Page() {
   //const [{ data, error, fetching }, reexecute] = useRealtime<Article>('article')
@@ -11,7 +11,17 @@ export default function Page() {
   const [aricleList, setArticleList] = React.useState<Article[]>([]);
 
   useEffect(() => {
-    monitorArticleList(supabaseClient, setArticleList);
+
+    supabaseClient.refreshSession().then(({data, error}) => {
+      if (error){
+        console.log("refreshSession", error)
+        router.push('/signin')
+      }
+    })
+
+    supabaseClient.monitorArticleList( setArticleList);
+
+    
   }, []);
 
   const router = useRouter();

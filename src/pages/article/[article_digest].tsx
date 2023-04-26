@@ -14,24 +14,33 @@ import { Menu, Transition } from "@headlessui/react";
 //import React from 'react';
 import { Fragment, useState, useEffect, SetStateAction, Dispatch } from "react";
 import { Tab, Listbox } from "@headlessui/react";
-import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import {
-  supabaseClient,
-  getArticle,
-  monitorHighlightsOfArticle,
-  getHighlight,
-  monitorHighlightQueries,
-  highlightSummaryFunction,
-  highlightQuestionFunction,
-} from "@/lib/supabaseClient";
+  CheckIcon,
+  ChevronUpDownIcon,
+  ArrowPathIcon,
+} from "@heroicons/react/20/solid";
+import { supabaseClient } from "@/lib/supabaseClient";
 import React from "react";
 
-function MyDisclosure({ title, content }: { title: string; content: string }) {
+function textWithLineBreak(text: string, className:string) {
+
+
   return (
-    <Disclosure>
+    <Fragment>{text.split("\n").map((line, idx) => (
+      <p className={className} key={idx}>
+        {line}<br/>
+      </p>
+      
+    ))}</Fragment>
+  )
+}
+
+function MyDisclosure({ title, content, defaultOpen }: { title: string; content: string, defaultOpen:boolean }) {
+  return (
+    <Disclosure defaultOpen={defaultOpen} >
       {({ open }) => (
         <>
-          <Disclosure.Button className="flex w-full justify-between rounded-lg bg-purple-100 px-4 py-2 text-left text-sm font-medium text-purple-900 hover:bg-purple-200 focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75">
+          <Disclosure.Button className="flex w-full justify-between rounded-lg bg-purple-100 px-4 my-1 py-2 text-left text-sm font-medium text-purple-900 hover:bg-purple-200 focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75">
             <span>{title}</span>
             <ChevronUpIcon
               className={`${
@@ -40,7 +49,7 @@ function MyDisclosure({ title, content }: { title: string; content: string }) {
             />
           </Disclosure.Button>
           <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500">
-            {content}
+            {textWithLineBreak(content, "mb-2 text-black")}
           </Disclosure.Panel>
         </>
       )}
@@ -60,52 +69,66 @@ function QuestionAnswerTab({
   selectedHighlightSummaries: HighlightQuery[];
 }) {
   const [question, setQuestion] = useState<string>("");
+  const [errorMsg, setErrorMsg] = useState<string>("");
+
+  const [loading, setLoading] = useState<boolean>(false);
+
 
   const sendQuestion = () => {
     if (!selectedHighlight) {
       console.log("no highlight selected");
+      setErrorMsg("Error: no highlight selected")
       return;
     }
-
     console.log(question);
 
-    highlightQuestionFunction(
-      supabaseClient,
-      selectedHighlight.id,
-      question
-    ).then((result) => {
-      if (result.error) {
-        console.log(result);
-        return;
-      }
-      console.log("answer", result.data?.answer);
-    });
+    const questionToSend = question
+    setQuestion("")
+    setLoading(true)
+    supabaseClient
+      .highlightQuestionFunction(selectedHighlight.id, questionToSend)
+      .then((result) => {
+        setLoading(false)
+        if (result.error) {
+          console.log(result);
+          setErrorMsg("error: cannot fullfull the request");
+          return;
+        }
+        console.log("answer", result.data?.answer);
+      });
   };
 
   return (
     <>
-      <div>
-        {selectedHighlightSummaries
-          .filter((data) => data.type === "question")
+      <div className=''>
+        {errorMsg}
+        {selectedHighlightSummaries.filter((data) => data.type === "question").slice(0, -1)
           .map((data, idx) => (
-            <MyDisclosure key={idx} title={data.query} content={data.answer} />
+            <MyDisclosure key={idx} title={data.query} content={data.answer||""} defaultOpen={false}/>
           ))}
+        {selectedHighlightSummaries.filter((data) => data.type === "question").slice(-1).map((data, idx) => (
+            <MyDisclosure key={idx} title={data.query} content={data.answer||""} defaultOpen={true}/>
+          ))}
+          <div className="h-screen"> {' '}</div>
+
       </div>
 
-      <div className=" focus:outline-none absolute bottom-0 left-0 w-full border-t md:border-t-0 dark:border-white/20 md:border-transparent md:dark:border-transparent md:bg-vert-light-gradient bg-white dark:bg-gray-800 md:!bg-transparent dark:md:bg-vert-dark-gradient pt-2">
+      <div className={"focus:outline-none absolute bottom-0 left-0 w-full border-t p-3 "+(loading?"bg-gray-300":"bg-white")}>
         <textarea
           placeholder="Send a message..."
+          value={question}
           onChange={(e) => {
             setQuestion(e.target.value);
           }}
-          className=" focus:outline-none m-0 w-full resize-none border-0 bg-transparent p-0 pr-7 focus:ring-0 focus-visible:ring-0 dark:bg-transparent pl-2 md:pl-0"
+          className="h-20 focus:outline-none m-0 group w-full resize-none border-0 bg-transparent p-0 pr-7 focus:ring-0 focus-visible:ring-0 dark:bg-transparent pl-2"
         ></textarea>
 
         <button
-          className="absolute p-1 rounded-md text-gray-500 bottom-1.5 md:bottom-2.5 hover:bg-gray-100 enabled:dark:hover:text-gray-400 dark:hover:bg-gray-900 disabled:hover:bg-transparent dark:disabled:hover:bg-transparent right-1 md:right-2 disabled:opacity-40"
+          className="absolute my-2 bottom-7 rounded-md text-gray-500 p-2 hover:bg-gray-100 enabled:dark:hover:text-gray-400 dark:hover:bg-gray-900 disabled:hover:bg-transparent  right-4  disabled:opacity-40"
           onClick={sendQuestion}
+          disabled={loading}
         >
-          send{" "}
+          {loading?"sending":"send"}
         </button>
       </div>
     </>
@@ -125,111 +148,163 @@ function SummaryTab({
 }) {
   const [summaryModeList, setSummaryModeList] =
     useState<Array<SummaryType>>(allSummaryType);
-  const [selectedSummaryMode, setselectedSummaryMode] = useState(
+  const [selectedSummaryMode, setSelectedSummaryMode] = useState(
     summaryModeList[0]
   );
   const [summaryResponse, setSummaryResponse] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<number>(0);
+  const [errorred, setErrorred] = useState<boolean>(false);
+  const [queryToAnswer, setQueryToAnswer] = useState<Map<String, string>>(
+    new Map()
+  );
+  const listboxButtonRef = React.useRef<HTMLButtonElement>(null);
+
+  const assignSummaryToQuery = (query: string, answer: string) => {
+    const newQueryToAnswer = new Map(queryToAnswer);
+    newQueryToAnswer.set(query, answer);
+
+    console.log('assignSummaryToQuery', newQueryToAnswer)
+    setQueryToAnswer(newQueryToAnswer);
+  };
+
+  useEffect(() => {
+    listboxButtonRef.current?.click();
+  }, []);
+
+
+  useEffect(() => {
+    setSummaryResponse(queryToAnswer.get(selectedSummaryMode) || "")
+  }, [queryToAnswer, selectedSummaryMode]);
+
+
+
+
+  const sendSummaryRequest = (selectedMode:string) => {
+    if (!selectedHighlight) return;
+
+    setErrorred(false);
+    setLoading(loading+1);
+    assignSummaryToQuery(selectedMode, "");
+
+    supabaseClient
+      .highlightSummaryFunction(selectedHighlight.id, selectedMode)
+      .then(({ data, error }) => {
+        setLoading(loading-1);
+        if (error) {
+          setErrorred(true);
+          console.log(error);
+          return;
+        }
+        assignSummaryToQuery(selectedMode, data!.summary);
+      });
+  };
 
   const onSelection = (selectedMode: SummaryType) => {
     //TODO: show warning message
-    if (!selectedHighlight) return;
 
-    setselectedSummaryMode(selectedMode);
+    setSelectedSummaryMode(selectedMode);
 
-    const match = selectedHighlightSummaries.filter(
-      (highlightQuery) =>
-        highlightQuery.query === selectedMode && highlightQuery.answer
-    );
-
-    if (match.length) {
-      setSummaryResponse(match[0].answer);
+    if (!selectedHighlight) {
+      assignSummaryToQuery(selectedMode, "No highlight was selected");
       return;
     }
 
-    console.log(selectedHighlightSummaries);
+    const matchedQueries = selectedHighlightSummaries.filter(
+      (highlightQuery) => highlightQuery.query === selectedMode
+    );
+
+    // if the query has been sent before
+    if (matchedQueries.length) {
+      if (matchedQueries.slice(-1)[0].answer) {
+        assignSummaryToQuery(selectedMode, matchedQueries.slice(-1)[0].answer||'');
+        return;
+      } else {
+        setErrorred(false);
+        assignSummaryToQuery(selectedMode, "Please reload if no response in a few seconds");
+      }
+    }
 
     //TODO: (add a allow user to generate the response)
-    setLoading(true);
-    highlightSummaryFunction(
-      supabaseClient,
-      selectedHighlight.id,
-      selectedMode
-    ).then(({ data, error }) => {
-      setLoading(false);
-      if (error) {
-        console.log(error);
-        return;
-      }
-      setSummaryResponse(data!.summary);
-    });
+    sendSummaryRequest(selectedMode);
   };
   return (
     <>
-      <Listbox
-        as="div"
-        className="w-10/12 mt-5 mx-auto"
-        value={selectedSummaryMode}
-        onChange={onSelection}
-      >
-        <Listbox.Button className="relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
-          <span className="block truncate">{selectedSummaryMode}</span>
-          <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-            <ChevronUpDownIcon
-              className="h-5 w-5 text-gray-400"
-              aria-hidden="true"
-            />
-          </span>
-        </Listbox.Button>
-        <Transition
-          as={Fragment}
-          leave="transition ease-in duration-100"
-          leaveFrom="opacity-100"
-          leaveTo="opacity-0"
+      <div className="flex w-11/12 mt-5 mx-auto">
+        <Listbox
+          className="w-10/12 m-auto"
+          as="div"
+          value={selectedSummaryMode}
+          onChange={onSelection}
         >
-          <Listbox.Options className="absolute mt-1 max-h-60 w-10/12 overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-            {summaryModeList.map((summaryMode, idx) => (
-              <Listbox.Option
-                key={idx}
-                className={({ active }) =>
-                  `relative cursor-default select-none py-2 pl-10 pr-4 ${
-                    active ? "bg-amber-100 text-amber-900" : "text-gray-900"
-                  }`
-                }
-                value={summaryMode}
-              >
-                {({ selected }) => (
-                  <>
-                    <span
-                      className={`block truncate ${
-                        selected ? "font-medium" : "font-normal"
-                      }`}
-                    >
-                      {summaryMode}
-                    </span>
-                    {selected ? (
-                      <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
-                        <CheckIcon className="h-5 w-5" aria-hidden="true" />
+          <Listbox.Button
+            ref={listboxButtonRef}
+            className="relative w-full cursor-default rounded-lg hover:cursor-pointer bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm"
+          >
+            <span className="block truncate">{selectedSummaryMode}</span>
+            <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+              <ChevronUpDownIcon
+                className="h-5 w-5 text-gray-400"
+                aria-hidden="true"
+              />
+            </span>
+          </Listbox.Button>
+          <Transition
+            as={Fragment}
+            leave="transition ease-in duration-100"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <Listbox.Options className="absolute mt-1 max-h-60 w-10/12 overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+              {summaryModeList.map((summaryMode, idx) => (
+                <Listbox.Option
+                  key={idx}
+                  className={({ active }) =>
+                    `relative  hover:cursor-pointer  select-none py-2 pl-10 pr-4 ${
+                      active ? "bg-amber-100 text-amber-900" : "text-gray-900"
+                    }`
+                  }
+                  value={summaryMode}
+                >
+                  {({ selected }) => (
+                    <>
+                      <span
+                        className={`block truncate ${
+                          selected ? "font-medium" : "font-normal"
+                        }`}
+                      >
+                        {summaryMode}
                       </span>
-                    ) : null}
-                  </>
-                )}
-              </Listbox.Option>
-            ))}
-          </Listbox.Options>
-        </Transition>
-      </Listbox>
+                      {selected ? (
+                        <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
+                          <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                        </span>
+                      ) : null}
+                    </>
+                  )}
+                </Listbox.Option>
+              ))}
+            </Listbox.Options>
+          </Transition>
+        </Listbox>
 
-      <div className="w-full  p-7">
-        {summaryResponse.split("\n").map((line, idx) => (
-          <p className="my-3" key={idx}>
-            {line}
-          </p>
-        ))}
+        <div
+          className="m-auto rounded-md border-2 px-3 py-1 hover:bg-slate-200 hover:cursor-pointer"
+          onClick={()=>sendSummaryRequest(selectedSummaryMode)}
+        >
+          <ArrowPathIcon className="h-5 text-slate-500" />
+        </div>
+      </div>
+
+      <div className="w-full p-7">
+        {errorred && <div className="text-center">An error occured</div>}
+        {loading ? <div className="text-center">loading...</div>:null}
+        {textWithLineBreak(summaryResponse,'my-3')}
+        
       </div>
     </>
   );
 }
+
 
 function IndexTab({
   article,
@@ -301,7 +376,7 @@ function TabNav({
   setSelectedHighlight: Dispatch<SetStateAction<Highlight | null>>;
   selectedHighlightSummaries: HighlightQuery[];
 }) {
-  const [selectedTabIndex, setSelectedTabIndex] = useState(0);
+  const [selectedTabIndex, setSelectedTabIndex] = useState(1);
 
   return (
     <div className="w-full px-0">
@@ -382,8 +457,17 @@ export default function DataHolder() {
   >([]);
 
   useEffect(() => {
+    supabaseClient.refreshSession().then(({ data, error }) => {
+      if (error) {
+        console.log("refreshSession", error);
+        router.push("/signin");
+      }
+    });
+  }, []);
+
+  useEffect(() => {
     if (typeof article_digest === "string") {
-      getArticle(supabaseClient, article_digest).then(({ data, error }) => {
+      supabaseClient.getArticle(article_digest).then(({ data, error }) => {
         if (error) {
           console.log(error);
           return;
@@ -395,7 +479,7 @@ export default function DataHolder() {
 
   useEffect(() => {
     if (article.digest === "placeholder") return;
-    monitorHighlightsOfArticle(supabaseClient, article.digest, setHighlights);
+    supabaseClient.monitorHighlightsOfArticle(article.digest, setHighlights);
     console.log("DataHolder:highlights", highlights);
   }, [article.digest]);
 
@@ -411,8 +495,7 @@ export default function DataHolder() {
 
   useEffect(() => {
     if (selectedHighlight) {
-      monitorHighlightQueries(
-        supabaseClient,
+      supabaseClient.monitorHighlightQueries(
         selectedHighlight.id,
         setSelectedHighlightSummaries
       );
@@ -428,11 +511,8 @@ export default function DataHolder() {
       <div className="relative bg-blue-500 text-white h-14 w-screen overflow-ellipsis p-1">
         <div className="h-6 overflow-clip w-11/12">
           <b>{article.title}</b>
-
         </div>
-
         <div className="absolute  right-0 top-0 w-5/12 h-14 bg-gradient-to-r from-transparent to-blue-500"></div>
-
         Focus: {selectedHighlight?.digest || "None"}
       </div>
       <TabNav

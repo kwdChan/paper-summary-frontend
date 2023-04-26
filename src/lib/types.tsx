@@ -22,7 +22,7 @@ export interface HighlightQuery {
     created_at: string
     highlight_id: number
     query: string, 
-    answer: string,
+    answer: string|null,
     type: string,
     user_id: string,
 }

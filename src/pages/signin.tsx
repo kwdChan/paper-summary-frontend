@@ -1,29 +1,49 @@
 import Image from 'next/image'
-import { useSignUp, useAuthStateChange } from 'react-supabase'
-import React from 'react';
+import {supabaseClient} from  '@/lib/supabaseClient'
+import React, {useEffect, useState} from 'react';
+import { useRouter } from 'next/router';
 
 export default function Home() {
-  const [{ error, fetching, session, user }, signUp] = useSignUp()
+  const router = useRouter()
   
-  const [password, setPassword] = React.useState<string>('')
-  const [email, setEmail] = React.useState<string>('')
-  const [passwordVisble, setPasswordVisble] = React.useState<boolean>(false)
+  const [password, setPassword] = useState<string>('')
+  const [email, setEmail] = useState<string>('')
+  const [passwordVisble, setPasswordVisble] = useState<boolean>(false)
 
+  const [user, setUser] = useState<any>(null)
+  const [error, setError] = useState<any>(null)
 
-  async function onClickSignUp() {
-    const { error, session, user } = await signUp({
-      email: email,
-      password: password,
+  useEffect(() => {
+    supabaseClient.refreshSession().then(({data, error}) => {
+      if (data.user){
+        console.log("refreshSession", error)
+        router.push('/article')
+      }
     })
+  }, []);
+
+
+  async function onClickSignIn() {
+    const result = await supabaseClient.signIn(
+      email,
+      password,
+    )
+
+    if (result.data.user) setUser(result.data.user)
+    if (result.error) setError(result.error)
+    console.log(result)
+    console.log(error)
+  }
+
+  if (user) {
+    router.push('/article')
   }
 
 
-  if (error) return <div>Error signing up</div>
-  if (fetching) return <div>Signing up</div>
-  if (user) return <div>Welcome user</div>
-
   return (
     <div >
+
+
       <div className="relative mt-2 rounded-md shadow-sm m-9">
         <label htmlFor='username'>Email</label>
         <div className="relative mt-2 rounded-md shadow-sm">
@@ -56,8 +76,11 @@ export default function Home() {
 
 
       <div className='mt-3 mx-9'>
+        <button onClick={onClickSignIn}
+        className="inline-flex items-center m-3 px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
 
-        <button onClick={onClickSignUp}
+      >Sign in</button>
+        <button onClick={onClickSignIn}
           className="inline-flex items-center m-3 px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
 
         >Sign Up</button>

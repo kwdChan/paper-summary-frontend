@@ -1,0 +1,9 @@
+name: paper-summary-supabase
+version: "3.8"
+services:
+  paper-summary:
+    build: 
+      context: .
+      target: builder
+    ports:
+      - 23073:3000
