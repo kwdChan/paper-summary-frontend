@@ -4,7 +4,7 @@ export interface Article {
     user_id: string,
     source: string,
     title: string,
-    digest: string
+    digest: string,
 }
 
 export interface Highlight {
@@ -13,7 +13,7 @@ export interface Highlight {
     text: string
     user_id: string,
     article_digest: string, 
-    digest: string
+    digest: string,
 }
 
 

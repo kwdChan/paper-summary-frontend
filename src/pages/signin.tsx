@@ -36,7 +36,7 @@ export default function Home() {
   }
 
   if (user) {
-    router.push('/article')
+    router.push('/welcome')
   }
 
 

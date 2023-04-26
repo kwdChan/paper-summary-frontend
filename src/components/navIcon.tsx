@@ -1,5 +1,5 @@
 import { Menu, Transition } from "@headlessui/react";
-import { Fragment, useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState, createContext, useContext } from "react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { Highlight } from "@/lib/types";
 import { supabaseClient } from "@/lib/supabaseClient";
@@ -41,6 +41,15 @@ function MenuEntrance() {
 
 
 export function NavIcon({}) {
+
+  const { deleteMode, setDeleteMode } = useContext(NavIconContext);
+
+  const deleteModeToggle = () => {
+    setDeleteMode(!deleteMode);
+  }
+
+
+
   return (
     <div className="fixed top-2 right-6 text-right z-50">
 
@@ -60,12 +69,12 @@ export function NavIcon({}) {
             <div className="px-1 py-1 ">
 
             <MenuItem text='All articles' href='/article' />
-
+            <MenuItem text='Delete mode' href='' onClick={deleteModeToggle} />
             </div>
 
             <div className="px-1 py-1">
             <MenuItem text='Signout' href='/signin' onClick={()=>supabaseClient.signout().then(res=>console.log(res))} />
-
+            
             </div>
           </Menu.Items>
         </Transition>
@@ -74,48 +83,15 @@ export function NavIcon({}) {
   );
 }
 
-function DeleteInactiveIcon(props: any) {
-  return (
-    <svg
-      {...props}
-      viewBox="0 0 20 20"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <rect
-        x="5"
-        y="6"
-        width="10"
-        height="10"
-        fill="#EDE9FE"
-        stroke="#A78BFA"
-        strokeWidth="2"
-      />
-      <path d="M3 6H17" stroke="#A78BFA" strokeWidth="2" />
-      <path d="M8 6V4H12V6" stroke="#A78BFA" strokeWidth="2" />
-    </svg>
-  );
+
+
+export interface NavIconContextData {
+  deleteMode: boolean;
+  setDeleteMode: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-function DeleteActiveIcon(props: any) {
-  return (
-    <svg
-      {...props}
-      viewBox="0 0 20 20"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <rect
-        x="5"
-        y="6"
-        width="10"
-        height="10"
-        fill="#8B5CF6"
-        stroke="#C4B5FD"
-        strokeWidth="2"
-      />
-      <path d="M3 6H17" stroke="#C4B5FD" strokeWidth="2" />
-      <path d="M8 6V4H12V6" stroke="#C4B5FD" strokeWidth="2" />
-    </svg>
-  );
-}
+export const NavIconContext = createContext<NavIconContextData>({
+  deleteMode: false,
+  setDeleteMode: () => {},
+});
+

@@ -34,6 +34,11 @@ class MySupabaseClient  {
     ).single();
   }
 
+
+  deleteArticle(article_ids: number[]) {
+    return this.client.from("article").delete().in("id", article_ids).then(()=>{console.log("deleted")});
+  }
+
   getHighlightQueries (highlight_id: number) {
     return this.client.from("highlight_query").select<string, HighlightQuery>("*").eq(
       "highlight_id",
@@ -77,6 +82,8 @@ class MySupabaseClient  {
       article_digest,
     ).order('created_at', { ascending: true });;
   }
+
+
   getHighlightsOfArticle (article_digest: string) {
     return this.client.from("highlight")
       .select<string, Highlight>("*")
