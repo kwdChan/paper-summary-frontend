@@ -19,9 +19,19 @@ class MySupabaseClient  {
   signIn (email: string, password: string) {
     return this.client.auth.signInWithPassword({ email, password });
   }
+
+  signUp (email: string, password: string) {
+    return this.client.auth.signUp({ email, password });
+  }
+
   refreshSession () {
     return this.client.auth.refreshSession();
   }
+  getSession () {
+    return this.client.auth.getSession();
+  }
+
+
 
   signout () {
     return this.client.auth.signOut();

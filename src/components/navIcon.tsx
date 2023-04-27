@@ -48,8 +48,6 @@ export function NavIcon({}) {
     setDeleteMode(!deleteMode);
   }
 
-
-
   return (
     <div className="fixed top-2 right-6 text-right z-50">
 
