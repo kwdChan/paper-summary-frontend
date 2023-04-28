@@ -8,7 +8,6 @@ const SUPABASE_KEY: string = process.env.NEXT_PUBLIC_SUPABASE_KEY || "";
 //export const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 
-
 class MySupabaseClient  {
   client: SupabaseClient;
 
@@ -32,8 +31,11 @@ class MySupabaseClient  {
   }
 
 
-
   signout () {
+    if (window.self !== window.top) {
+      window.parent.postMessage({ message: "signout" }, "*");
+    } 
+
     return this.client.auth.signOut();
   }
 

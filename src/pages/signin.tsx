@@ -12,7 +12,7 @@ export default function Home() {
   const [user, setUser] = useState<any>(null);
   const [error, setError] = useState<any>(null);
   const [signinFailed, setSigninFailed] = useState<boolean>(false);
-
+  
   useEffect(() => {
     supabaseClient.refreshSession().then(({ data, error }) => {
       if (data.user) {
@@ -30,9 +30,6 @@ export default function Home() {
       setSigninFailed(true)
       setError(result.error.message);
     }
-
-
-
     console.log(result);
     console.log(error);
   }
