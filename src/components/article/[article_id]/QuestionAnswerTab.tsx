@@ -44,6 +44,7 @@ export function QuestionAnswerTab({
 }) {
   const [question, setQuestion] = useState<string>("");
   const [errorMsg, setErrorMsg] = useState<string>("");
+  const [latestAnswer, setLatestAnswer] = useState<string>("");
 
   const [loading, setLoading] = useState<boolean>(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -51,7 +52,7 @@ export function QuestionAnswerTab({
 
   useEffect(() => {
     const handleKeyPress = (event: { keyCode: number; }) => {
-      console.log(inputRef)
+      //console.log(inputRef)
       if (event.keyCode === 13 && document.activeElement === inputRef.current) {
          sendButtonRef.current?.click();
       }
@@ -63,6 +64,10 @@ export function QuestionAnswerTab({
       inputRef.current?.removeEventListener('keyup', handleKeyPress);
     };
   }, []);
+
+  useEffect(() => {
+    setLatestAnswer(selectedHighlightSummaries[selectedHighlightSummaries.length - 1]?.answer || "");
+  }, [selectedHighlightSummaries]);
   
   const sendQuestion = () => {
     if (!selectedHighlight) {
@@ -74,18 +79,11 @@ export function QuestionAnswerTab({
 
     const questionToSend = question;
     setQuestion("");
-    setLoading(true);
+    //setLoading(true);
+    
     supabaseClient
-      .highlightQuestionFunction(selectedHighlight.id, questionToSend)
-      .then((result) => {
-        setLoading(false);
-        if (result.error) {
-          console.log(result);
-          setErrorMsg("error: cannot fullfull the request");
-          return;
-        }
-        console.log("answer", result.data?.answer);
-      });
+      .highlightQuestionFunctionStreamed(selectedHighlight.id, questionToSend, setLatestAnswer)
+      
   };
 
   return (
@@ -109,7 +107,7 @@ export function QuestionAnswerTab({
             <MyDisclosure
               key={idx}
               title={data.query}
-              content={data.answer || ""}
+              content={latestAnswer}
               defaultOpen={true} />
           ))}
         <div className="h-screen"> </div>

@@ -41,7 +41,7 @@ export function SummaryTab({
     const newQueryToAnswer = new Map(queryToAnswer);
     newQueryToAnswer.set(query, answer);
 
-    console.log("assignSummaryToQuery", newQueryToAnswer);
+    //console.log("assignSummaryToQuery", newQueryToAnswer);
     setQueryToAnswer(newQueryToAnswer);
   };
 
@@ -61,17 +61,22 @@ export function SummaryTab({
     setLoading(true);
     assignSummaryToQuery(selectedMode, "");
 
-    supabaseClient
-      .highlightSummaryFunction(selectedHighlight.id, selectedMode)
-      .then(({ data, error }) => {
-        setLoading(false);
-        if (error) {
-          setErrorred(true);
-          console.log(error);
-          return;
-        }
-        assignSummaryToQuery(selectedMode, data!.summary);
-      });
+    // supabaseClient
+    //   .highlightSummaryFunction(selectedHighlight.id, selectedMode)
+    //   .then(({ data, error }) => {
+    //     setLoading(false);
+    //     if (error) {
+    //       setErrorred(true);
+    //       console.log(error);
+    //       return;
+    //     }
+    //     assignSummaryToQuery(selectedMode, data!.summary);
+    //   });
+
+    supabaseClient.highlightSummaryFunctionStreamed(
+      selectedHighlight.id, selectedMode, (res:string)=>{assignSummaryToQuery(selectedMode, res)}
+    )
+    setLoading(false);
   };
 
   const onSelection = (selectedMode: SummaryType) => {

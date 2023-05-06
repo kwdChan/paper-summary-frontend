@@ -37,6 +37,7 @@ export default function DataHolder() {
   const [selectedHighlight, setSelectedHighlight] = useState<Highlight | null>(
     null
   );
+  
   const [selectedHighlightSummaries, setSelectedHighlightSummaries] = useState<
     HighlightQuery[]
   >([]);
@@ -62,6 +63,7 @@ export default function DataHolder() {
     }
   }, [article_digest]);
 
+  //TODO: consider to unsubscribe when unmounted (but not necessary)
   useEffect(() => {
     if (article.digest === "placeholder") return;
     supabaseClient.monitorHighlightsOfArticle(article.digest, setHighlights);
