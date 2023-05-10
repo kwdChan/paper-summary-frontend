@@ -3,12 +3,13 @@ import {
   Highlight,
   HighlightQuery
 } from "@/lib/types";
-import { useState, SetStateAction, Dispatch } from "react";
+import { useState, SetStateAction, Dispatch, useEffect } from "react";
 import { Tab } from "@headlessui/react";
 import React from "react";
 import { QuestionAnswerTab } from "./QuestionAnswerTab";
 import { SummaryTab } from "./SummaryTab";
 import { IndexTab } from "./IndexTab";
+import { useRouter } from "next/router";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -39,7 +40,16 @@ export function TabNav({
   selectedHighlightSummaries: HighlightQuery[];
 }) {
 
+  const router = useRouter();
   const [selectedTabIndex, setSelectedTabIndex] = useState(selectedHighlight? 1:0);
+  const { article_digest, highlight_digest } = router.query;
+
+  useEffect(() => {
+    if (highlight_digest && selectedHighlight){
+      setSelectedTabIndex(1);
+    }
+  }, [selectedHighlight, highlight_digest]);
+
 
   return (
     <div className="w-full px-0">
