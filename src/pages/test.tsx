@@ -9,28 +9,13 @@ export default function Page() {
     // supabaseClient.highlightSummaryFunctionStreamed(
     //   229, "One sentence", setData
     // )
+    const userID = (await supabaseClient.client.auth.getSession()).data.session!.user.id
 
-    const response =  await supabaseClient.customInvoke("https://mbjyxjgolhbfbkcnocdu.functions.supabase.co/SSE_test" ,{})
-    const reader = response!.body!.getReader();
-    const decoder = new TextDecoder();
+    const response =  await supabaseClient.client.rpc("query_highlight", {highlight_id: 131})
+   
+    console.log(response)
+    setData(response)
 
-    let fullResponse: string = ""
-    while (true) {
-      console.log(fullResponse)
-      const { value, done } = await reader.read();
-
-      if (done) {
-        break;
-      }
-      const lines = decoder.decode(value).split("\n");
-      lines
-        .filter((line) => line.startsWith("data: "))
-        .map(
-          (line) => {
-            console.log(line)
-          }
-        )
-    }
   }
 
   return (
