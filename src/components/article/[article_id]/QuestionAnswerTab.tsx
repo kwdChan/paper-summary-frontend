@@ -82,7 +82,7 @@ export function QuestionAnswerTab({
     //setLoading(true);
     
     supabaseClient
-      .highlightQuestionFunctionStreamed(selectedHighlight.id, questionToSend, setLatestAnswer)
+      .highlightQuestionFunctionStreamed(selectedHighlight.id, questionToSend, setLatestAnswer, setErrorMsg)
       
   };
 

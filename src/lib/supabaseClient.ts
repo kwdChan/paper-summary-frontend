@@ -9,24 +9,23 @@ class MySupabaseClient {
   client: SupabaseClient;
 
   constructor() {
-    this.client = createClient(SUPABASE_URL, SUPABASE_KEY)
+    this.client = createClient(SUPABASE_URL, SUPABASE_KEY);
   }
 
   async customInvoke(url: string, params: any): Promise<Response> {
     const { data, error } = await this.client.auth.getSession();
-    const access_token = data.session?.access_token ?? null
+    const access_token = data.session?.access_token ?? null;
     const authHeaders = {
       Authorization: `Bearer ${access_token}`,
-      apikey: `${SUPABASE_KEY}`
-    }
-    return fetch(url, {
+      apikey: `${SUPABASE_KEY}`,
+    };
+    const res  = await fetch(url, {
       method: "POST",
-      headers: { ...authHeaders, "Content-Type": "application/json", },
+      headers: { ...authHeaders, "Content-Type": "application/json" },
       body: JSON.stringify(params),
-    }
-    )
+    })
+    return res
   }
-
 
   signIn(email: string, password: string) {
     return this.client.auth.signInWithPassword({ email, password });
@@ -63,18 +62,25 @@ class MySupabaseClient {
   }
 
   deleteArticle(article_ids: number[]) {
-    return this.client.from("article").delete().in("id", article_ids).then(() => { console.log("deleted") });
+    return this.client.from("article").delete().in("id", article_ids).then(
+      () => {
+        console.log("deleted");
+      },
+    );
   }
 
   getHighlightQueries(highlight_id: number) {
-    return this.client.from("highlight_query").select<string, HighlightQuery>("*").eq(
+    return this.client.from("highlight_query").select<string, HighlightQuery>(
+      "*",
+    ).eq(
       "highlight_id",
       highlight_id,
-    ).order('created_at', { ascending: true });
-    ;
+    ).order("created_at", { ascending: true });
   }
-  monitorHighlightQueries(highlight_id: number, setHighlightQueries: Dispatch<SetStateAction<HighlightQuery[]>>) {
-
+  monitorHighlightQueries(
+    highlight_id: number,
+    setHighlightQueries: Dispatch<SetStateAction<HighlightQuery[]>>,
+  ) {
     const handleChanges = (payload: any) => {
       console.log("monitorHighlightQueries", payload);
 
@@ -86,7 +92,6 @@ class MySupabaseClient {
       );
     };
     handleChanges({});
-
 
     this.client
       .channel("any")
@@ -107,17 +112,21 @@ class MySupabaseClient {
     return this.client.from("highlight").select<string, Highlight>("*").eq(
       "article_digest",
       article_digest,
-    ).order('created_at', { ascending: false });;
+    ).order("created_at", { ascending: false });
   }
-
 
   getHighlightsOfArticle(article_digest: string) {
     return this.client.from("highlight")
       .select<string, Highlight>("*")
-      .eq("article_digest", article_digest).order('created_at', { ascending: false });;
+      .eq("article_digest", article_digest).order("created_at", {
+        ascending: false,
+      });
   }
 
-  monitorHighlightsOfArticle(article_digest: string, setHighlights: Dispatch<SetStateAction<Highlight[]>>) {
+  monitorHighlightsOfArticle(
+    article_digest: string,
+    setHighlights: Dispatch<SetStateAction<Highlight[]>>,
+  ) {
     const handleChanges = (payload: any) => {
       console.log("monitorHighlightsOfArticle", payload);
 
@@ -146,14 +155,15 @@ class MySupabaseClient {
   }
 
   monitorArticleList(setArticleList: Dispatch<SetStateAction<Article[]>>) {
-
-
     const handleChanges = (payload: any) => {
       console.log("monitorArticleList");
 
       console.log("monitorArticleList", payload);
 
-      this.client.from("article").select<string, Article>("*").order('created_at', { ascending: false }).then(
+      this.client.from("article").select<string, Article>("*").order(
+        "created_at",
+        { ascending: false },
+      ).then(
         ({ data, error }) => {
           if (error) return;
           setArticleList(data);
@@ -173,20 +183,25 @@ class MySupabaseClient {
       .subscribe();
   }
 
-  
-
-
   private async fetchStreamedReponse<Param = any>(
     url: string,
     param: Param,
-    setState: (response:string)=>void,
+    setState: (response: string) => void,
+    setError: (error: string) => void,
   ) {
+    const response = await this.customInvoke(url, param);
+    if (!response.ok) {
+      if (response.status === 400) setError("Error from OpenAI. The total query may be too long. The maximum length roughly corresponds to 3000 words (4096 tokens)")
+      else if (response.status === 403) setError("Usage limit is reached for today")
+      else setError(response.statusText)
+      return;
+    }
 
-    const response = await this.customInvoke(url, param)
+    // read stream
     const reader = response!.body!.getReader();
     const decoder = new TextDecoder();
 
-    let fullResponse: string = ""
+    let fullResponse: string = "";
     while (true) {
       //console.log(fullResponse)
       const { value, done } = await reader.read();
@@ -200,92 +215,62 @@ class MySupabaseClient {
         .map(
           (line) => {
             try {
-              let data: { choices: Array<{ delta: any, finish_reason: string | null, index: number }> } = JSON.parse(line.slice(6))
-              let content = data.choices[0].delta.content
+              let data: {
+                choices: Array<
+                  { delta: any; finish_reason: string | null; index: number }
+                >;
+              } = JSON.parse(line.slice(6));
+              let content = data.choices[0].delta.content;
               if (content) {
-                fullResponse = fullResponse + content
-                setState(fullResponse)
+                fullResponse = fullResponse + content;
+                setState(fullResponse);
                 //console.log(content)
-              }else{
-
+              } else {
                 //console.log(data)
               }
+            } catch {
+              console.log("fetchStreamedReponse: error");
             }
-            catch {
-              console.log("fetchStreamedReponse: error")
-            }
-          }
-        )
+          },
+        );
     }
-    
-    console.log(fullResponse)
+
+    console.log(fullResponse);
   }
 
   highlightSummaryFunctionStreamed(
     highlight_id: number,
     summaryMode: string,
-    setSummary:(res:string)=>void,
+    setSummary: (res: string) => void,
+    setError: (res: string) => void,
+    
   ) {
     return this.fetchStreamedReponse(
-      "https://mbjyxjgolhbfbkcnocdu.functions.supabase.co/summarise_highlight_streamed", {
-      highlight_id: highlight_id,
-      summaryMode: summaryMode,
-      summaryModeVersion: "summaryModeV0",
-    }, setSummary)
-
-
+      "https://mbjyxjgolhbfbkcnocdu.functions.supabase.co/summarise_highlight_streamed",
+      {
+        highlight_id: highlight_id,
+        summaryMode: summaryMode,
+        summaryModeVersion: "summaryModeV0",
+      },
+      setSummary, 
+      setError
+    );
   }
 
   highlightQuestionFunctionStreamed(
     highlight_id: number,
     question: string,
-    setAnswer:(res:string)=>void,
+    setAnswer: (res: string) => void,
+    setError: (res: string) => void,
+
   ) {
     return this.fetchStreamedReponse(
-      "https://mbjyxjgolhbfbkcnocdu.functions.supabase.co/question_highlight_streamed", {
-      highlight_id: highlight_id,
-      question: question,
-    }, setAnswer)
-
-
-  }
-
-  highlightSummaryFunction(
-    highlight_id: number,
-    summaryMode: string,
-  ) {
-    interface HighlightSummaryReturn {
-      summary: string;
-      query_id: number;
-    }
-    return this.client.functions.invoke<HighlightSummaryReturn>(
-      "summarise_highlight",
+      "https://mbjyxjgolhbfbkcnocdu.functions.supabase.co/question_highlight_streamed",
       {
-        body: JSON.stringify({
-          highlight_id: highlight_id,
-          summaryMode: summaryMode,
-          summaryModeVersion: "summaryModeV0",
-        }),
+        highlight_id: highlight_id,
+        question: question,
       },
-    );
-  }
-
-  highlightQuestionFunction(
-    highlight_id: number,
-    question: string,
-  ) {
-    interface HighlightQuestionReturn {
-      answer: string;
-      query_id: number;
-    }
-    return this.client.functions.invoke<HighlightQuestionReturn>(
-      "question_highlight",
-      {
-        body: JSON.stringify({
-          highlight_id: highlight_id,
-          question: question,
-        }),
-      },
+      setAnswer, setError
     );
   }
 
@@ -297,8 +282,6 @@ class MySupabaseClient {
       highlight_id,
     );
   }
-
 }
 
-export const supabaseClient = new MySupabaseClient()
-
+export const supabaseClient = new MySupabaseClient();

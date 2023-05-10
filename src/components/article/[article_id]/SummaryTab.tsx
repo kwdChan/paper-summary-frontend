@@ -29,9 +29,8 @@ export function SummaryTab({
   const [selectedSummaryMode, setSelectedSummaryMode] = useState(
     summaryModeList[0]
   );
+  const [errorMsg, setErrorMsg] = useState<string>("");
   const [summaryResponse, setSummaryResponse] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
-  const [errorred, setErrorred] = useState<boolean>(false);
   const [queryToAnswer, setQueryToAnswer] = useState<Map<String, string>>(
     new Map()
   );
@@ -57,26 +56,12 @@ export function SummaryTab({
     if (!selectedHighlight)
       return;
 
-    setErrorred(false);
-    setLoading(true);
+    setErrorMsg("");
     assignSummaryToQuery(selectedMode, "");
 
-    // supabaseClient
-    //   .highlightSummaryFunction(selectedHighlight.id, selectedMode)
-    //   .then(({ data, error }) => {
-    //     setLoading(false);
-    //     if (error) {
-    //       setErrorred(true);
-    //       console.log(error);
-    //       return;
-    //     }
-    //     assignSummaryToQuery(selectedMode, data!.summary);
-    //   });
-
     supabaseClient.highlightSummaryFunctionStreamed(
-      selectedHighlight.id, selectedMode, (res:string)=>{assignSummaryToQuery(selectedMode, res)}
+      selectedHighlight.id, selectedMode, (res:string)=>{assignSummaryToQuery(selectedMode, res)}, (res:string)=>{setErrorMsg(res); console.log(res)}
     )
-    setLoading(false);
   };
 
   const onSelection = (selectedMode: SummaryType) => {
@@ -101,7 +86,7 @@ export function SummaryTab({
         );
         return;
       } else {
-        setErrorred(false);
+        setErrorMsg("");
         assignSummaryToQuery(
           selectedMode,
           "Please reload if no response in a few seconds"
@@ -174,8 +159,7 @@ export function SummaryTab({
       </div>
 
       <div className="w-full p-7">
-        {errorred && <div className="text-center">An error occured</div>}
-        {loading ? <div className="text-center">loading...</div> : null}
+        {errorMsg && <div className="text-center">{errorMsg}</div>}
         {textWithLineBreak(summaryResponse, "my-3")}
       </div>
     </>
