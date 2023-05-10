@@ -46,10 +46,12 @@ export function TabNav({
 
   useEffect(() => {
     if (highlight_digest && selectedHighlight){
-      setSelectedTabIndex(1);
+      if (highlight_digest === selectedHighlight.digest){
+        setSelectedTabIndex(1);
+      }
+      
     }
   }, [selectedHighlight, highlight_digest]);
-
 
   return (
     <div className="w-full px-0">
