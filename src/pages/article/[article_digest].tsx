@@ -90,17 +90,17 @@ export default function DataHolder() {
   }, [selectedHighlight]);
 
   return (
-    <div className="w-screen h-screen  overflow-x-hidden overflow-y-scroll scroll">
+    <div className="relative w-screen h-screen overflow-x-hidden overflow-y-scroll scroll">
       <header>
         <NavIcon />
       </header>
 
-      <div className="relative bg-blue-500 text-white h-14 w-screen overflow-ellipsis p-1">
+      <div className="relative bg-blue-500 text-white h-14 w-screen overflow-clip p-1">
         <div className="h-6 overflow-clip w-11/12">
           <b>{article.title}</b>
         </div>
-        <div className="absolute  right-0 top-0 w-5/12 h-14 bg-gradient-to-r from-transparent to-blue-500"></div>
-        Focus: {selectedHighlight?.digest || "None"}
+        <div className="absolute right-0 top-0 w-5/12 h-14 bg-gradient-to-r from-transparent to-blue-500 "></div>
+        Focus: {selectedHighlight?.text || "Not selected"}
       </div>
       <TabNav
         article={article}

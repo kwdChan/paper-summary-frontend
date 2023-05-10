@@ -33,7 +33,7 @@ export default function Page() {
   }, [aricleList]);
 
   return (
-    <div>
+    <div className="relative">
       <header>
         <NavIcon />
       </header>

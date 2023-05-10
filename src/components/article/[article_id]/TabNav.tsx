@@ -38,7 +38,8 @@ export function TabNav({
   setSelectedHighlight: Dispatch<SetStateAction<Highlight | null>>;
   selectedHighlightSummaries: HighlightQuery[];
 }) {
-  const [selectedTabIndex, setSelectedTabIndex] = useState(1);
+
+  const [selectedTabIndex, setSelectedTabIndex] = useState(selectedHighlight? 1:0);
 
   return (
     <div className="w-full px-0">

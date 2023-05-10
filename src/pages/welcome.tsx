@@ -16,6 +16,8 @@ export default function Page() {
   useEffect(() => {
     if (window.parent!=window) {
       setIsOpen(true)
+    } else{
+      router.push("/article")
     }
 
   }, [])
@@ -39,7 +41,7 @@ export default function Page() {
         <br /><br />
         If you are from the extension, close the pop up and open it again.
       </div>
-      <ConfirmInChrome isOpen={isOpen} onAccept={submitCredentials} onCancel={()=>{router.push("article")}}/>
+      <ConfirmInChrome isOpen={isOpen} onAccept={submitCredentials} onCancel={()=>{supabaseClient.signout()}}/>
     </div>
   );
 }

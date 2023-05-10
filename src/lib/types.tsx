@@ -28,6 +28,15 @@ export interface HighlightQuery {
 }
 
 
+export interface UserInfo {
+    id: string,
+    last_use: string
+    usage_today: number, 
+    daily_limit: number,
+    email: string,
+}
+
+
 
 export type SummaryType = "One sentence"|"Argments and count-arguments"| "Main findings"
 
