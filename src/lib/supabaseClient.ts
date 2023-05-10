@@ -1,6 +1,6 @@
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
 import { Dispatch, SetStateAction } from "react";
-import { Article, Highlight, HighlightQuery } from "./types";
+import { Article, Highlight, HighlightQuery, UserInfo } from "./types";
 
 const SUPABASE_URL: string = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
 const SUPABASE_KEY: string = process.env.NEXT_PUBLIC_SUPABASE_KEY || "";
@@ -58,6 +58,9 @@ class MySupabaseClient {
     ).single();
   }
 
+  getUserInfo() {
+    return this.client.from("user").select<string, UserInfo>("*").single();
+  }
 
   deleteArticle(article_ids: number[]) {
     return this.client.from("article").delete().in("id", article_ids).then(() => { console.log("deleted") });
