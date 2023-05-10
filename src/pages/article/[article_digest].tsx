@@ -90,7 +90,7 @@ export default function DataHolder() {
   }, [selectedHighlight]);
 
   return (
-    <div className="w-screen h-screen  overflow-x-hidden overflow-y-scroll scroll">
+    <div className="relative w-screen h-screen  overflow-x-hidden overflow-y-scroll scroll">
       <header>
         <NavIcon />
       </header>

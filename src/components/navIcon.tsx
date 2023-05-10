@@ -49,7 +49,7 @@ export function NavIcon({}) {
   }
 
   return (
-    <div className="fixed top-2 right-6 text-right z-50">
+    <div className="absolute top-2 right-2 text-right z-50">
 
       <Menu as="div" className="relative inline-block text-left">
         <MenuEntrance />
@@ -64,7 +64,11 @@ export function NavIcon({}) {
           leaveTo="transform opacity-0 scale-95"
         >
           <Menu.Items className="absolute right-0 mt-2 w-36 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+          <div className="px-1 py-1"><MenuItem text='My Account' href='/dashboard' /></div>
+            
             <div className="px-1 py-1 ">
+
+            
 
             <MenuItem text='All articles' href='/article' />
             <MenuItem text='Delete mode' href='' onClick={deleteModeToggle} />
