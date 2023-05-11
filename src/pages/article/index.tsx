@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import React, { useEffect, useContext } from "react";
 //import { useRealtime } from 'react-supabase'
 import { supabaseClient } from "@/lib/supabaseClient";
+import Head from "next/head";
 
 export default function Page() {
   //const [{ data, error, fetching }, reexecute] = useRealtime<Article>('article')
@@ -34,6 +35,9 @@ export default function Page() {
 
   return (
     <div className="relative">
+      <Head>
+      <meta name="google-site-verification" content="SzbW5eNxXEGPWiBSBivdfE8A85OX2sM68zKRkYuv9Xg" />
+      </Head>
       <header>
         <NavIcon />
       </header>
