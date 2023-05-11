@@ -89,7 +89,8 @@ export function QuestionAnswerTab({
   return (
     <>
       <div className="">
-        {errorMsg}
+      {errorMsg && <div className="text-center">{errorMsg}</div>}
+
         {selectedHighlightSummaries
           .filter((data) => data.type === "question")
           .slice(0, -1)
