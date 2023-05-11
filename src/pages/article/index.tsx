@@ -35,9 +35,7 @@ export default function Page() {
 
   return (
     <div className="relative">
-      <Head>
-      <meta name="google-site-verification" content="SzbW5eNxXEGPWiBSBivdfE8A85OX2sM68zKRkYuv9Xg" />
-      </Head>
+
       <header>
         <NavIcon />
       </header>
