@@ -38,9 +38,24 @@ export interface UserInfo {
 
 
 
-export type SummaryType = "One sentence"|"Argments and count-arguments"| "Main findings"
+export type SummaryType = "One sentence"|
+    "Main points"|
+    "Listed details"|
+    "Argments and count-arguments"|
+    "Simplify it"|
+    "Journal articles: Abstract simplified"|
+    "Journal articles: New findings"|
+    "Journal articles: Background"|
+    "Journal articles: New ideas/opinions"|
+    "Journal articles: Separate the news from the old"
 
-export const allSummaryType: SummaryType[] = [
-    "One sentence", "Argments and count-arguments", "Main findings"
-]
-
+export const allSummaryType: SummaryType[] = ["One sentence",
+    "Main points",
+    "Listed details", 
+    "Argments and count-arguments", 
+    "Simplify it", 
+    "Journal articles: Abstract simplified", 
+    "Journal articles: New findings",
+    "Journal articles: Background", 
+    "Journal articles: New ideas/opinions", 
+    "Journal articles: Separate the news from the old"]
