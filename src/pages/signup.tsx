@@ -3,6 +3,7 @@ import { supabaseClient } from "@/lib/supabaseClient";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { MyInputField, MyPasswordField } from "../components/MyInputField";
+import Link from "next/link";
 export default function Home() {
   const router = useRouter();
   const [password, setPassword] = useState<string>("");
@@ -89,6 +90,7 @@ export default function Home() {
         </div>
         
       </div>
+      <div className="bottom-7 w-full text-center absolute text-sm text-blue-700 underline"> <Link href='./privacy'>Privacy Policy</Link></div>
     </div>
   );
 }

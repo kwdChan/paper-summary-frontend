@@ -3,6 +3,7 @@ import { supabaseClient } from "@/lib/supabaseClient";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { MyInputField, MyPasswordField } from "../components/MyInputField";
+import Link from "next/link";
 
 export default function Home() {
   const router = useRouter();
@@ -39,8 +40,8 @@ export default function Home() {
   }
 
   return (
-    <div className="flex items-center justify-center  h-screen">
-      <div className="flex flex-col">
+    <div className="flex flex-col items-center justify-center  h-screen ">
+      <div className="flex flex-col ">
       <MyInputField
           id="username"
           label="Email"
@@ -57,7 +58,7 @@ export default function Home() {
         />
         <div className={"mt-2 mx-auto"+" "+(error?"text-red-500":"text-white")}>{error}</div>
 
-        <div className="flex justify-center mt-3 mx-9">
+        <div className="flex justify-center mt-3 mx-9 ">
 
           <button
             onClick={()=>router.push('/signup')}
@@ -74,6 +75,7 @@ export default function Home() {
           </button>
         </div>
       </div>
+      <div className="bottom-7 absolute text-sm text-blue-700 underline"> <Link href='./privacy'>Privacy Policy</Link></div>
     </div>
   );
 }
