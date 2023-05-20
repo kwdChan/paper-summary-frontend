@@ -41,6 +41,8 @@ function MenuEntrance() {
 
 
 export function NavIcon({}) {
+  const router = useRouter();
+  console.log("router.query", router.route)
 
   const { deleteMode, setDeleteMode } = useContext(NavIconContext);
 
@@ -71,7 +73,7 @@ export function NavIcon({}) {
             
 
             <MenuItem text='All Articles' href='/article' />
-            <MenuItem text='Delete Mode' href='' onClick={deleteModeToggle} />
+            {(router.route=='/article') && <MenuItem text='Delete Mode' href='' onClick={deleteModeToggle} />}
             </div>
 
             <div className="px-1 py-1">
