@@ -16,7 +16,8 @@ export default function IndexPage({}) {
         <Link 
                 href={DOWNLOAD_URL}
       >
-        Download
+        <a target="_blank" rel="noopener noreferrer">Download</a>
+        
       </Link></div>
       <button
         className="
