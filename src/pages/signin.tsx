@@ -2,8 +2,10 @@ import Image from "next/image";
 import { supabaseClient } from "@/lib/supabaseClient";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { MyInputField, MyPasswordField } from "../components/MyInputField";
+import { MyInputField, MyPasswordField } from "../components/authMatters/MyInputField";
 import Link from "next/link";
+import { SigninWithGoogleButton } from "@/components/authMatters/SigninWithGoogle";
+import { Divider } from "@/components/authMatters/Divider";
 
 export default function Home() {
   const router = useRouter();
@@ -74,6 +76,13 @@ export default function Home() {
             Sign in
           </button>
         </div>
+
+          <Divider/>
+
+        <div className="self-center">
+          <SigninWithGoogleButton />
+        </div>
+
       </div>
       <div className="bottom-7 absolute text-sm text-blue-700 underline"> <Link href='./privacy'>Privacy Policy</Link></div>
     </div>

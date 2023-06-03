@@ -2,8 +2,10 @@ import Image from "next/image";
 import { supabaseClient } from "@/lib/supabaseClient";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { MyInputField, MyPasswordField } from "../components/MyInputField";
+import { MyInputField, MyPasswordField } from "../components/authMatters/MyInputField";
 import Link from "next/link";
+import { Divider } from "@/components/authMatters/Divider";
+import { SigninWithGoogleButton } from "@/components/authMatters/SigninWithGoogle";
 export default function Home() {
   const router = useRouter();
   const [password, setPassword] = useState<string>("");
@@ -85,8 +87,14 @@ export default function Home() {
           >
             Sign Up
           </button>
-
           
+          
+        </div>
+        <Divider/>
+        <div className="flex justify-center">
+          
+          <SigninWithGoogleButton/>
+
         </div>
         
       </div>
