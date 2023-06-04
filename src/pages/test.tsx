@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { ExclamationCircleIcon, XMarkIcon } from "@heroicons/react/20/solid";
 import { supabaseClient } from "@/lib/supabaseClient";
 
-import {Error} from '@/components/MessageBox'
+import {WarningBox} from '@/components/MessageBox'
 
 
 import Example from "@/components/test/test";
@@ -22,7 +22,7 @@ export default function Page() {
   return (
     <div className="relative h-screen border-2">
       
-      <Error>error</Error>
+      <WarningBox>error</WarningBox>
       <button className="bg-gray-300 m-2 p-4  rounded-md" onClick={test}>
         Run
       </button>

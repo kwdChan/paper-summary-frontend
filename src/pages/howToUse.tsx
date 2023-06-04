@@ -1,14 +1,16 @@
-import { supabaseClient } from "@/lib/supabaseClient";
-import Link from "next/link";
+import { WarningBox } from "@/components/MessageBox";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { ConfirmInChrome } from "@/components/authMatters/ConfirmInChrome";
-
-import { useState } from "react";
-import { Dialog } from "@headlessui/react";
 
 export default function Page() {
   const router = useRouter();
+  const { error: errorQuery } = router.query;
 
-  return <>hello</>;
+
+  return (
+  <>
+    hello
+    <WarningBox>{typeof(errorQuery)==='string'? errorQuery: null}</WarningBox>
+
+  </>)
 }
