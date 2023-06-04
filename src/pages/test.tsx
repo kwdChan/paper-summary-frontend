@@ -1,24 +1,29 @@
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
-
+import { ExclamationCircleIcon, XMarkIcon } from "@heroicons/react/20/solid";
 import { supabaseClient } from "@/lib/supabaseClient";
+
+import {Error} from '@/components/MessageBox'
+
+
 import Example from "@/components/test/test";
 export default function Page() {
   const [data, setData] = React.useState<any>(null);
+  const [up, setUp] = React.useState<boolean>(false);
 
   async function test() {
     // supabaseClient.highlightSummaryFunctionStreamed(
     //   229, "One sentence", setData
     // )
-    const { data, error } = await supabaseClient.client.auth.refreshSession()
-
+    setUp(true);
+    const { data, error } = await supabaseClient.client.auth.refreshSession();
   }
 
   return (
-    <div className="flex flex-col h-screen ">
-      <p className="w-screen overflow-auto">{JSON.stringify(data)}</p>
-      <Example/>
-      <button className="bg-gray-300 m-3 p-4  rounded-md" onClick={test}>
+    <div className="relative h-screen border-2">
+      
+      <Error>error</Error>
+      <button className="bg-gray-300 m-2 p-4  rounded-md" onClick={test}>
         Run
       </button>
     </div>
