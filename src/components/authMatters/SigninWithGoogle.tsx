@@ -2,55 +2,43 @@ import React, { useEffect, useRef, useState } from "react";
 import { supabaseClient } from "@/lib/supabaseClient";
 
 import Image from 'next/image'
-import Head from "next/head";
 
 export function SigninWithGoogleButton() {
   let originName = useRef('')
   const [mouseDown, setMouseDown] = useState<boolean>(false);
-  const button = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     originName.current = window.location.origin;
-
-    function handleCredentialResponse(response) {
-      console.log("Encoded JWT ID token: " + response.credential);
-    }
-    google.accounts.id.initialize({
-      client_id: "848494833065-40fbkfmuljlovlivsm4rqc65hls2agso.apps.googleusercontent.com",
-      login_uri: "https://mbjyxjgolhbfbkcnocdu.supabase.co/auth/v1/callback",
-      ux_mode: "popup",
-      callback: handleCredentialResponse
-    })
-
-    google.accounts.id.renderButton(
-      button.current,
-      { theme: "outline", size: "large" }  // customization attributes
-    );
-    //google.accounts.id.prompt();
-
-    console.log(google);
-
-
     }, []);
 
 
+  async function signInWithGoogle() {
+
+    const { data, error } = await supabaseClient.client.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: originName.current+'/welcome',
+        queryParams: {
+          access_type: 'offline',
+          prompt: 'consent',
+        },
+      },
+    })
+
+  }
 
   return (
-    <div className="relative w-52 h-12">
-            
-
-      <div 
-        ref={button}
-        className="g_id_signin"
-         data-type="standard"
-         data-size="large"
-         data-theme="outline"
-         data-text="sign_in_with"
-         data-shape="rectangular"
-         data-logo_alignment="left">
-      </div>
-
-        
+    <div className="relative w-52 h-12 rounded-sm" role="button">
+        <Image 
+        onClick={signInWithGoogle}  
+        className="border-2 border-black hover:cursor-pointer "
+        src="/google_signin_buttons/web/2x/btn_google_signin_light_normal_web@2x.png"
+        alt='google signin button'
+        layout='fill'
+        onMouseDown={()=>setMouseDown(true)}
+        onMouseUp={()=>setMouseDown(false)}
+        />     
   </div>
-           
+
   );
 }
