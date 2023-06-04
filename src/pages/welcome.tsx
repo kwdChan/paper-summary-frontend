@@ -23,19 +23,16 @@ export default function Page() {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
 
-  // useEffect(() => {
-  //   if (window.parent!=window) {
-  //     setIsOpen(true)
-  //   } else{
-  //     router.push("/article")
-  //   }
-
-  // }, [])
-
   useEffect(() => {
+
+    setTimeout(() => {
+      router.push("/article");
+    }, 1000)
+
     // if it's in extension, there is a meta tag with name="review-express-extension"
     const job = checkIfChrome(setIsOpen);
     return () => clearInterval(job);
+
   }, []);
 
   const submitCredentials = () => {
@@ -50,7 +47,7 @@ export default function Page() {
   return (
     <div>
       <div className="absolute top-1/2">
-        Welcome! If you are from the web:{" "}
+        Welcome! You will be redirected in 1 second. Otherwise,  {" "}
         <Link href="/article">
           <span className="text-blue-700 underline hover:cursor-pointer">
             click here
@@ -58,7 +55,6 @@ export default function Page() {
         </Link>
         <br />
         <br />
-        If you are from the extension, close the pop up and open it again.
       </div>
       <ConfirmInChrome
         isOpen={isOpen}
