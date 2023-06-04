@@ -15,7 +15,7 @@ import {
 } from "@heroicons/react/20/solid";
 import { supabaseClient } from "@/lib/supabaseClient";
 import React from "react";
-import { textWithLineBreak } from "../../../lib/textWithLineBreak";
+import { textWithLineBreak } from "./textWithLineBreak";
 
 export function SummaryTab({
   article, highlights, selectedHighlight, selectedHighlightSummaries,

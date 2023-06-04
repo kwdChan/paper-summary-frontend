@@ -10,12 +10,7 @@ export default function Page() {
     // supabaseClient.highlightSummaryFunctionStreamed(
     //   229, "One sentence", setData
     // )
-    const userID = (await supabaseClient.client.auth.getSession()).data.session!.user.id
-
-    const response =  await supabaseClient.client.rpc("query_highlight", {highlight_id: 131})
-   
-    console.log(response)
-    setData(response)
+    const { data, error } = await supabaseClient.client.auth.refreshSession()
 
   }
 
