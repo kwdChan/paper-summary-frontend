@@ -29,7 +29,7 @@ export default function Page() {
       const extensionTag = document.querySelector(
         'meta[name="review-express-extension"]'
       );
-      if (extensionTag) {
+      if (!extensionTag) {
         router.push("/article");
       }
     }, 1000)
