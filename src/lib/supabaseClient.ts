@@ -43,10 +43,7 @@ class MySupabaseClient {
   }
 
   signout() {
-    if (window.self !== window.top) {
-      window.parent.postMessage({ message: "signout" }, "*");
-    }
-
+    window.parent.postMessage({ message: "signout" }, "*");
     return this.client.auth.signOut();
   }
 
