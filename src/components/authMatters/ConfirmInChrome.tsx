@@ -40,7 +40,7 @@ export  function ConfirmInChrome({isOpen, onAccept, onCancel}:{isOpen:boolean, o
                   </Dialog.Title>
                   <div className="mt-2">
                     <p className="text-sm text-gray-500">
-                      Confirm to allowing this extension to access your account. 
+                      Confirm to allow this extension to access your account. 
                     </p>
                   </div>
 
