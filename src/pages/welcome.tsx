@@ -26,7 +26,12 @@ export default function Page() {
   useEffect(() => {
 
     setTimeout(() => {
-      router.push("/article");
+      const extensionTag = document.querySelector(
+        'meta[name="review-express-extension"]'
+      );
+      if (extensionTag) {
+        router.push("/article");
+      }
     }, 1000)
 
     // if it's in extension, there is a meta tag with name="review-express-extension"
