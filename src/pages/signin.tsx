@@ -15,15 +15,23 @@ export default function Home() {
   const [user, setUser] = useState<any>(null);
   const [error, setError] = useState<any>(null);
   const [signinFailed, setSigninFailed] = useState<boolean>(false);
-  
+
+  const { extensionSignin } = router.query;
+
+
   useEffect(() => {
+    if (extensionSignin==='true'){
+      supabaseClient.signout()
+    }
+
+    // refresh session to validate the access token and refresh token
     supabaseClient.refreshSession().then(({ data, error }) => {
-      if (data.user) {
+      if (data.user && !extensionSignin) {
         console.log("refreshSession", error);
         router.push("/article");
       }
     });
-  }, []);
+  }, [extensionSignin]);
 
   async function onClickSignIn() {
     const result = await supabaseClient.signIn(email, password);
@@ -37,6 +45,8 @@ export default function Home() {
     console.log(error);
   }
 
+  
+  // TODO: can use useEffect but i don't want risk it for now
   if (user) {
     router.push("/welcome");
   }
