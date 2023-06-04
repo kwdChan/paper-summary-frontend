@@ -42,6 +42,9 @@ export default function Page() {
     supabaseClient.client.auth.getSession().then(({ data, error }) => {
       window.postMessage({ message: "signin", payload: { data, error } }, "*");
     });
+    // send out the refresh token and immediately refresh the session
+    // the refresh token is only valid for 60 seconds after it's used
+    supabaseClient.refreshSession()
   };
 
   return (
