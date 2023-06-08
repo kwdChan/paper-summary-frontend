@@ -1,3 +1,4 @@
+import MarkdownRender from "@/components/theme/Markdowns";
 import { useRouter } from "next/router";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import remarkGfm from "remark-gfm";
@@ -64,27 +65,7 @@ const LI = ({ ...props }) => (
 
 
 export default function PrivacyPolicy({}) {
-  const router = useRouter();
-
   return (
-    <div className="">
-      <ReactMarkdown remarkPlugins={[remarkGfm]} components={
-        { 
-          h1: H1,
-          h2: H2,
-          a: Link,
-          p:P, 
-          ul:UL,
-          li:LI,
-
-
-
-
-        }}
-        
-        >
-        {content}
-      </ReactMarkdown>
-    </div>
+    <MarkdownRender>{content}</MarkdownRender>
   );
 }
