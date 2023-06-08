@@ -28,7 +28,8 @@ export default function Page() {
       <Title> After Installation </Title>
       <Paragraph>
         You will need an account to use this service. Simply put in your email
-        address and we will send you a login link.
+        address and we will send you a login link. 
+        Check your spam folder if you do not see the email.
       </Paragraph>
 
       <div className="flex flex-col m-6 items-center ">
@@ -61,6 +62,9 @@ export default function Page() {
       <div className="m-5"></div>
 
       <Paragraph>Note that the page may need to be reloaded, if it is opened before this extension is installed.</Paragraph>
+
+      <Paragraph>You can set up a keyboard shortcut in chrome://extensions/shortcuts to trigger this action. </Paragraph>
+
       <div className="m-5"></div>
 
       <Title>Troubleshoot</Title>

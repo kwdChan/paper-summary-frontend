@@ -4,7 +4,7 @@ import { supabaseClient } from "@/lib/supabaseClient";
 import Image from 'next/image'
 
 export function SigninWithGoogleButton() {
-  let originName = useRef('')
+  const originName = useRef('')
   const [mouseDown, setMouseDown] = useState<boolean>(false);
 
   useEffect(() => {
