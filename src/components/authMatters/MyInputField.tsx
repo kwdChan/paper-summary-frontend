@@ -38,7 +38,6 @@ export function MyInputField({
       <label className="" htmlFor={id}>{label}</label>
       <div className="relative rounded-md shadow-sm">
         <MyStyledInput type="text" id={id} placeholder={placeholder} onChange={onChange} errored={errored} />
-
       </div>
     </div>
   );
