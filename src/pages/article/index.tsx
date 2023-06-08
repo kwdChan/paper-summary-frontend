@@ -5,6 +5,7 @@ import React, { useEffect, useContext } from "react";
 //import { useRealtime } from 'react-supabase'
 import { supabaseClient } from "@/lib/supabaseClient";
 import Head from "next/head";
+import { TopBar } from "@/components/theme/TopBar";
 
 export default function Page() {
   //const [{ data, error, fetching }, reexecute] = useRealtime<Article>('article')
@@ -35,35 +36,15 @@ export default function Page() {
 
   return (
     <div className="relative">
-
       <header>
         <NavIcon />
       </header>
 
-      <div className="flex items-center justify-between relative bg-blue-500 text-white h-14 w-screen overflow-ellipsis p-1">
-        
-    
-        <div className="w-8/12 px-2 ">
-          <b>Article list</b>
-        </div>
+      <TopBar>
+        <TopBar.Title>Article list</TopBar.Title>
+        <DeleteButton deleteMode={deleteMode} checkedArticle={checkedArticle} setDeleteMode={setDeleteMode}/>
+      </TopBar>
 
-        <div className="flex absolute right-24 mx-10 h-5 w-5 items-center">
-              {deleteMode && (
-                <button
-                  onClick={() => {
-                    console.log('delete clicked')
-                    
-
-                    supabaseClient.deleteArticle(Array.from(checkedArticle.keys()))
-                    setDeleteMode(false)
-
-
-                  }}
-                  className="bg-red-500 hover:cursor-pointer rounded-md p-2 text-sm"
-                >DELETE</button>
-              )}
-            </div>
-      </div>
       <ol>
         {aricleList?.map((article) => (
           <li
@@ -91,10 +72,33 @@ export default function Page() {
                 ></input>
               )}
             </div>
-
           </li>
         ))}
       </ol>
     </div>
   );
 }
+
+function DeleteButton(
+
+  {deleteMode, checkedArticle, setDeleteMode}:
+  {deleteMode: boolean, 
+  checkedArticle: Map<number, boolean>, 
+  setDeleteMode: React.Dispatch<React.SetStateAction<boolean>>}
+  ) {
+  return <div className="flex absolute right-24 mx-10 h-5 w-5 items-center">
+    {deleteMode && (
+      <button
+        onClick={() => {
+          console.log("delete clicked");
+          supabaseClient.deleteArticle(Array.from(checkedArticle.keys()));
+          setDeleteMode(false);
+        } }
+        className="bg-red-500 hover:cursor-pointer rounded-md p-2 text-sm"
+      >
+        DELETE
+      </button>
+    )}
+  </div>;
+}
+
