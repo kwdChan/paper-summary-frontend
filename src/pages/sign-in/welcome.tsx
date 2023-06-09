@@ -5,7 +5,30 @@ import { Dispatch, SetStateAction, useEffect } from "react";
 import { ConfirmInChrome } from "@/components/authMatters/ConfirmInChrome";
 
 import { useState } from "react";
-import { Dialog } from "@headlessui/react";
+
+
+function RedirectMessage(){
+  return (
+    <div className="mx-5">
+      Welcome! You will be redirected in 1 second. Otherwise,  {" "}
+        <Link href="/article">
+          <span className="text-blue-700 underline hover:cursor-pointer">
+            click here
+          </span>
+        </Link>
+    </div>
+  )
+}
+function AfterConfirmMessage(){
+  return (
+    <>
+      <p className="mx-5">Welcome! You may now close this tab.</p> {" "}
+    </>
+  )
+}
+
+
+
 
 function checkIfChrome(setIsOpen: Dispatch<SetStateAction<boolean>>) {
   return setInterval(() => {
@@ -22,6 +45,7 @@ function checkIfChrome(setIsOpen: Dispatch<SetStateAction<boolean>>) {
 export default function Page() {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
+  const [confirmedInChrome, setConfirmedInChrome] = useState(false);
 
   useEffect(() => {
 
@@ -47,22 +71,17 @@ export default function Page() {
     // send out the refresh token and immediately refresh the session
     // the refresh token is only valid for 60 seconds after it's used
     supabaseClient.refreshSession()
+    setConfirmedInChrome(true);
   };
 
   return (
     <div>
       <div className="absolute top-1/2">
-        Welcome! You will be redirected in 1 second. Otherwise,  {" "}
-        <Link href="/article">
-          <span className="text-blue-700 underline hover:cursor-pointer">
-            click here
-          </span>
-        </Link>
-        <br />
-        <br />
+        {confirmedInChrome? <AfterConfirmMessage/>:<RedirectMessage/>}
+
       </div>
       <ConfirmInChrome
-        isOpen={isOpen}
+        isOpen={isOpen && !confirmedInChrome}
         onAccept={submitCredentials}
         onCancel={() => {
           supabaseClient.signout();
