@@ -2,7 +2,7 @@ import Image from "next/image";
 import { supabaseClient } from "@/lib/supabaseClient";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { MyInputField, MyPasswordField } from "../components/authMatters/MyInputField";
+import { MyInputField, MyPasswordField } from "../../components/authMatters/MyInputField";
 import Link from "next/link";
 import { SigninWithGoogleButton } from "@/components/authMatters/SigninWithGoogle";
 import { Divider } from "@/components/authMatters/Divider";
@@ -48,7 +48,7 @@ export default function Home() {
   
   // TODO: can use useEffect but i don't want risk it for now
   if (user) {
-    router.push("/welcome");
+    router.push("welcome");
   }
 
   return (
@@ -73,10 +73,10 @@ export default function Home() {
         <div className="flex justify-center mt-3 mx-9 ">
 
           <button
-            onClick={()=>router.push('/signup')}
+            onClick={()=>router.push('/getting-started')}
             className="inline-flex items-center m-3 px-4 py-2 border border-transparent text-sm font-medium text-indigo-800  rounded-md shadow-sm  bg-white ring-1 hover:bg-indigo-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
-            Sign Up
+            Sign up
           </button>
 
           <button
@@ -89,7 +89,13 @@ export default function Home() {
 
           <Divider/>
 
-        <div className="self-center">
+          <div className="flex flex-col items-center self-center">
+        <button
+            onClick={()=>router.push('/sign-in/passwordless')}
+            className="m-3 px-4 py-2 border border-transparent text-sm font-bold text-neutral-700  rounded-sm shadow-sm  bg-white ring-1 hover:bg-neutral-700 ring-neutral-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-neutral-500"
+          >
+            Passwordless sign-in
+          </button>
           <SigninWithGoogleButton />
         </div>
 

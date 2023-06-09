@@ -77,7 +77,7 @@ export function NavIcon({}) {
             </div>
 
             <div className="px-1 py-1">
-            <MenuItem text='Signout' href='/signin' onClick={()=>supabaseClient.signout().then(res=>console.log(res))} />
+            <MenuItem text='Signout' href='/sign-in/passwordless' onClick={()=>supabaseClient.signout().then(res=>console.log(res))} />
             
             </div>
           </Menu.Items>

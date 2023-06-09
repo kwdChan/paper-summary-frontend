@@ -41,14 +41,14 @@ export function OneLineInputField({ placeholder }: { placeholder: string }) {
     const { data, error } = await supabaseClient.client.auth.signInWithOtp({
       email: email,
       options: {
-        emailRedirectTo: originName.current+'/article'
+        emailRedirectTo: originName.current+'/sign-in/welcome'
       }
     })
   }
 
 
   return (
-    <div className="flex flex-row w-full sm:w-96">
+    <div className="flex flex-row w-full justify-between">
       <MyStyledInput
         type="text"
         id={"email"}
@@ -57,7 +57,7 @@ export function OneLineInputField({ placeholder }: { placeholder: string }) {
         errored={false}
       />
       <button 
-      className="inline-flex items-center mx-2 px-2 py-2 ring-indigo-600  text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:ring-1 focus:ring-indigo-500 focus:ring-offset-2"
+      className="ml-2 px-2 py-2 ring-indigo-600  text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:ring-1 focus:ring-indigo-500 focus:ring-offset-2"
       onClick={onSubmit}
       >
         Send

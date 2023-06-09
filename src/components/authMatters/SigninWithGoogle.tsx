@@ -17,7 +17,7 @@ export function SigninWithGoogleButton() {
     const { data, error } = await supabaseClient.client.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: originName.current+'/welcome',
+        redirectTo: originName.current+'/sign-in/welcome',
         queryParams: {
           access_type: 'offline',
           prompt: 'consent',

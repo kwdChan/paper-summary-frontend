@@ -2,7 +2,7 @@ import Image from "next/image";
 import { supabaseClient } from "@/lib/supabaseClient";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { MyInputField, MyPasswordField } from "../components/authMatters/MyInputField";
+import { MyInputField, MyPasswordField } from "../../components/authMatters/MyInputField";
 import Link from "next/link";
 import { Divider } from "@/components/authMatters/Divider";
 import { SigninWithGoogleButton } from "@/components/authMatters/SigninWithGoogle";
