@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { TopBar } from "@/components/theme/TopBar";
 import { NavIcon } from "@/components/navIcon";
 import { MyInputField } from "@/components/authMatters/MyInputField";
-import { OneLineInputField } from "@/components/authMatters/OneLineEmailRegister";
+import { PasswordlessSiginField } from "@/components/authMatters/OneLineEmailRegister";
 import { Divider } from "@/components/authMatters/Divider";
 import { SigninWithGoogleButton } from "@/components/authMatters/SigninWithGoogle";
 
@@ -29,11 +29,11 @@ export default function Page() {
       <Paragraph>
         You will need an account to use this service. Simply put in your email
         address and we will send you a login link. 
-        Check your spam folder if you do not see the email.
+        Password is not required. 
       </Paragraph>
 
       <div className="flex flex-col m-6 items-center ">
-        <OneLineInputField placeholder="Email address" />
+        <PasswordlessSiginField placeholder="Email address" />
         <div className="my-2"></div>
         <Divider />
 

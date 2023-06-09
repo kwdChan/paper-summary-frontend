@@ -34,7 +34,7 @@ export default function Home() {
   }, [extensionSignin]);
 
   async function onClickSignIn() {
-    const result = await supabaseClient.signIn(email, password);
+    const result = await supabaseClient.signIn(email.trim(), password);
 
     if (result.data.user) setUser(result.data.user);
     if (result.error) {
