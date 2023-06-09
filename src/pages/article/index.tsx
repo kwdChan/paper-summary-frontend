@@ -21,7 +21,7 @@ export default function Page() {
     supabaseClient.refreshSession().then(({ data, error }) => {
       if (error) {
         console.log("refreshSession", error);
-        router.push("/signin");
+        router.push("/sign-in/passwordless");
       }
     });
 
