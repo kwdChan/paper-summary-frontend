@@ -9,10 +9,10 @@ import { Divider } from "@/components/authMatters/Divider";
 import { SigninWithGoogleButton } from "@/components/authMatters/SigninWithGoogle";
 import { supabaseClient } from "@/lib/supabaseClient";
 
-function Title({ children }: { children: React.ReactNode }) {
-  return <h1 className="text-lg font-semibold mx-4 mt-5 mb-4">{children}</h1>;
+function Title({ id="", children }: { id?:string, children: React.ReactNode }) {
+  return <h1 id={id||undefined} className="text-lg font-semibold mx-4 mt-5 mb-4">{children}</h1>;
 }
-function Paragraph({ children }: { children: React.ReactNode }) {
+function Paragraph({ children }: {  children: React.ReactNode }) {
   return <p className="mx-5 text-sm my-2">{children}</p>;
 }
 
@@ -55,7 +55,7 @@ export default function Page() {
         <TopBar.Title>Getting started</TopBar.Title>
       </TopBar>
 
-      <Title> After Installation </Title>
+      <Title > After Installation </Title>
       <Paragraph>
         You will need an account to use this service. Simply put in your email
         address and we will send you a login link. Password is not required.
@@ -65,7 +65,7 @@ export default function Page() {
 
       <div className="m-5"></div>
 
-      <Title>How to use</Title>
+      <Title id="how_to_use">How to use</Title>
       <Paragraph>1. Highlight the text you want to summarise.</Paragraph>
       <Paragraph>
         {
@@ -95,8 +95,9 @@ export default function Page() {
       </Paragraph>
 
       <Paragraph>
-        You can set up a keyboard shortcut in chrome://extensions/shortcuts to
-        trigger this action.{" "}
+        You can set up a keyboard shortcut to trigger the action by enter this link: <b> chrome://extensions/shortcuts</b> to the URL bar.
+        
+      {" "}
       </Paragraph>
 
       <div className="m-5"></div>

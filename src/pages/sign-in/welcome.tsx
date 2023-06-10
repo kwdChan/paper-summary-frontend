@@ -11,7 +11,7 @@ function RedirectMessage(){
   return (
     <div className="mx-5">
       Welcome! You will be redirected in 1 second. Otherwise,  {" "}
-        <Link href="/article">
+        <Link href="/getting-started#how_to_use">
           <span className="text-blue-700 underline hover:cursor-pointer">
             click here
           </span>
@@ -54,7 +54,7 @@ export default function Page() {
         'meta[name="review-express-extension"]'
       );
       if (!extensionTag) {
-        router.push("/article");
+        router.push("/getting-started#how_to_use");
       }
     }, 1000)
 
