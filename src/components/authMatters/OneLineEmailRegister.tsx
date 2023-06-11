@@ -32,9 +32,9 @@ function MyStyledInput({
 
 function FeedbackMessage({ errored, children }: {errored:boolean, children: React.ReactNode }) {
   
-  let className = "w-9/12 text-xs px-1 pt-[2px] text-neutral-400 ";
+  let className = "w-10/12 text-xs px-1 pt-[2px] text-neutral-400";
   if (errored) {
-    className = "w-9/12 text-xs px-1 pt-[2px] text-red-400"
+    className = "w-10/12 text-xs px-1 pt-[2px] text-red-400"
   }
   return  ( 
     <div className={className}>
@@ -96,7 +96,7 @@ export function PasswordlessSiginField({
   };
 
   return (
-    <div className="w-full max-w-md flex flex-col items-center">
+    <div className="w-full max-w-md flex flex-col items-center px-2">
       <div className="flex flex-row w-full justify-between">
         <MyStyledInput
           type="text"
@@ -121,7 +121,7 @@ export function PasswordlessSiginField({
           </div>
         </button>
       </div>
-      <div className='w-10/12 '>
+      <div className='w-full'>
         <FeedbackMessage errored={errored}>{feedbackMessage}</FeedbackMessage>
         </div>
     
