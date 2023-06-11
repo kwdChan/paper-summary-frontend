@@ -1,4 +1,4 @@
-import { WarningBox } from "@/components/MessageBox";
+import { WarningBox } from "@/components/theme/MessageBox";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { TopBar } from "@/components/theme/TopBar";
@@ -180,9 +180,7 @@ export default function Page() {
 
       <PrivacyPolicyLink />
 
-      <WarningBox title={String(errorTitle || "")}>
-        {String(errorMessage || "")}
-      </WarningBox>
+      <WarningBox.Renderred/>
     </div>
   );
 }

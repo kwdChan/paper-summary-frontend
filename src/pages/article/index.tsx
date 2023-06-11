@@ -6,6 +6,7 @@ import React, { useEffect, useContext } from "react";
 import { supabaseClient } from "@/lib/supabaseClient";
 import Head from "next/head";
 import { TopBar } from "@/components/theme/TopBar";
+import { WarningBox } from "@/components/theme/MessageBox";
 
 export default function Page() {
   //const [{ data, error, fetching }, reexecute] = useRealtime<Article>('article')
@@ -75,6 +76,8 @@ export default function Page() {
           </li>
         ))}
       </ol>
+      <WarningBox.Renderred/>
+
     </div>
   );
 }

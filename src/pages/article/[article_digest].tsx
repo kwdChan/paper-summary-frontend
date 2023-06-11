@@ -12,6 +12,7 @@ import { useState, useEffect } from "react";
 import { supabaseClient } from "@/lib/supabaseClient";
 import React from "react";
 import { TabNav } from "../../components/article/[article_id]/TabNav";
+import { WarningBox } from "@/components/theme/MessageBox";
 
 export default function DataHolder() {
   const router = useRouter();
@@ -111,6 +112,7 @@ export default function DataHolder() {
       />
       <br />
       <br />
+      <WarningBox.Renderred/>
     </div>
   );
 }
