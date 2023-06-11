@@ -47,7 +47,7 @@ function AlreadySignedIn() {
   const router = useRouter();
   return (
     <div
-      className="hover:ring-2 hover:cursor-pointer flex flex-col items-center ring-1 mt-4 text-blue-800 ring-slate-300 rounded-sm bg-blue-50 p-2 w-10/12 max-w-xs mx-auto"
+      className="hover:ring-2 hover:cursor-pointer flex flex-col items-center ring-1 mt-4 text-blue-800 ring-slate-300 rounded-sm bg-blue-50 p-2 w-10/12 max-w-xs mx-auto hover:shadow-md"
       role="button"
       onClick={() => {
         router.push("/article");
@@ -146,7 +146,7 @@ export default function Page() {
 
 
 
-      <div className="m-5"></div>
+      <div className="m-14"></div>
 
       <Title>Troubleshooting</Title>
       <Subtitle>
@@ -166,6 +166,7 @@ export default function Page() {
           the extension
         </li>
       </ul>
+      <div className="m-10"></div>
       <Subtitle> Issue: Slow response or the OpenAI Error</Subtitle>
       <ul className="list-disc list-outside my-3 mx-10">
         <li className="my-3">
@@ -174,7 +175,7 @@ export default function Page() {
         </li>
         <li className="my-3">Contact me if that happens too often.</li>
       </ul>
-
+<div className="m-10"></div>
       <Subtitle> Issue: The text is too small </Subtitle>
       <ul className="list-disc list-outside my-3 mx-10">
         <li className="my-3">
@@ -182,6 +183,7 @@ export default function Page() {
           able to increase the text size like how you do it in a normal webpage.
         </li>
       </ul>
+      <div className="m-14"></div>
 
       <Title>Feedbacks</Title>
       <Paragraph>
