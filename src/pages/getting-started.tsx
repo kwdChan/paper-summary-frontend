@@ -8,17 +8,43 @@ import { PasswordlessSiginField } from "@/components/authMatters/OneLineEmailReg
 import { Divider } from "@/components/authMatters/Divider";
 import { SigninWithGoogleButton } from "@/components/authMatters/SigninWithGoogle";
 import { supabaseClient } from "@/lib/supabaseClient";
+import MarkdownRender from "@/components/theme/Markdowns";
 
-function Title({ id="", children }: { id?:string, children: React.ReactNode }) {
-  return <h1 id={id||undefined} className="text-lg font-semibold mx-4 mt-5 mb-4">{children}</h1>;
+function Title({
+  id = "",
+  children,
+}: {
+  id?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <h1 id={id || undefined} className="text-2xl font-semibold mx-4 mt-5 mb-4">
+      {children}
+    </h1>
+  );
 }
-function Paragraph({ children }: {  children: React.ReactNode }) {
-  return <p className="mx-5 text-sm my-2">{children}</p>;
+
+function Subtitle({
+  id = "",
+  children,
+}: {
+  id?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <h1 id={id || undefined} className="text-lg mx-4 mt-5 mb-4">
+      {children}
+    </h1>
+  );
+}
+
+function Paragraph({ children }: { children: React.ReactNode }) {
+  return <p className="mx-5 text-base my-2">{children}</p>;
 }
 
 function AlreadySignedIn() {
   return (
-    <div className="flex flex-col items-center ring-1 mt-4 text-blue-800 ring-slate-300 rounded-sm bg-blue-50 p-2 w-96 mx-auto">
+    <div className="flex flex-col items-center ring-1 mt-4 text-blue-800 ring-slate-300 rounded-sm bg-blue-50 p-2 w-10/12 max-w-xs mx-auto">
       You are signed in!
     </div>
   );
@@ -50,12 +76,12 @@ export default function Page() {
   }, []);
 
   return (
-    <>
+    <div className="overflow-x-clip">
       <TopBar>
         <TopBar.Title>Getting started</TopBar.Title>
       </TopBar>
 
-      <Title > After Installation </Title>
+      <Title> After Installation </Title>
       <Paragraph>
         You will need an account to use this service. Simply put in your email
         address and we will send you a login link. Password is not required.
@@ -69,7 +95,7 @@ export default function Page() {
       <Paragraph>1. Highlight the text you want to summarise.</Paragraph>
       <Paragraph>
         {
-          "2. Activate the extension by right clicking and selecting 'Summarise'."
+          "2. Activate the extension by right clicking and select 'Summarise the selected'."
         }
       </Paragraph>
       <Paragraph>
@@ -77,12 +103,9 @@ export default function Page() {
         selected to be summarised.
       </Paragraph>
 
-      <div className="flex flex-col items-center mt-5">
-        <video autoPlay muted loop>
-          <source
-            src="https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-mp4-file.mp4"
-            type="video/mp4"
-          />
+      <div className="flex flex-col items-center mt-5 bg-clip-content">
+        <video autoPlay muted loop className=" w-96 h-72">
+          <source src="/demo.mp4" type="video/mp4" />
           Your browser does not support HTML5 video.
         </video>
       </div>
@@ -95,24 +118,49 @@ export default function Page() {
       </Paragraph>
 
       <Paragraph>
-        You can set up a keyboard shortcut to trigger the action by enter this link: <b> chrome://extensions/shortcuts</b> to the URL bar.
-        
-      {" "}
+        You can set up a keyboard shortcut to trigger the action by enter this
+        link: <b> chrome://extensions/shortcuts</b> to the URL bar.{" "}
       </Paragraph>
 
       <div className="m-5"></div>
 
-      <Title>Troubleshoot</Title>
-      <Paragraph>
-        1. I don&apos;t see the popup: 1. fullscreen 2. opened in another
-        desktop
-      </Paragraph>
+      <Title>Troubleshooting</Title>
+      <Subtitle>
+        Issue: The popup does not appear upon activation <br />
+      </Subtitle>
+      <ul className="list-decimal list-outside my-3 mx-10">
+        <li className="my-3">
+          Turn off the fullscreen mode. The popup appears as a separated window so it may be hidden if you are
+          in the fullscreen mode
+        </li>
+        <li className="my-3">
+          See if it is on another virtual desktop. The popup will surface at its existing location if unclosed.
+        </li>
+        <li>
+          If none of that works, go to  <b> chrome://extensions</b> and reload the extension
+        </li>
 
-      <Paragraph>2. openai</Paragraph>
+      </ul>
+      <Subtitle> Issue 2: Slow response </Subtitle>
+      <ul className="list-disc list-outside my-3 mx-10">
+        <li className="my-3">
+          If you are experiencing slow response, it is likely that OpenAI is under heavy load. Please try again later.
+        </li>
+        <li className="my-3">
+          Contact me if that happens too often.
+        </li>
+      </ul>
+
+      <Subtitle> Issue 3: The text is too small </Subtitle>
+      <ul className="list-disc list-outside my-3 mx-10">
+        <li className="my-3">
+          Try &quot;ctrl-shift-=&quot; or &quot;cmd-shift-=&quot;.  You should be able to increase the text size like how you do it in a normal webpage. 
+        </li>
+      </ul> 
 
       <Title>Feedbacks</Title>
       <Paragraph>
-        If you have any suggestions, feature request and debug report, please
+        If you have any other issues, suggestions or feature requests, feel free to
         contact me on{" "}
         <a
           href="mailto:kwdaniel2020@gmail.com"
@@ -124,6 +172,6 @@ export default function Page() {
       <WarningBox title={String(errorTitle || "")}>
         {String(errorMessage || "")}
       </WarningBox>
-    </>
+    </div>
   );
 }
