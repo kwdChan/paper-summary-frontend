@@ -95,10 +95,10 @@ export default function Page() {
         You will need an account to use this service. Simply put in your email
         address and we will send you a login link. Password is not required.
       </Paragraph>
-      <div className="my-8">
+      <div className="my-8" id="how_to_use">
         {signedIn ? <AlreadySignedIn /> : <SigninSignupField />}
       </div>
-      <Title id="how_to_use">How to use</Title>
+      <Title >How to use</Title>
 
       <ul className="list-decimal list-outside my-3 mx-10">
         <li className="my-3">
