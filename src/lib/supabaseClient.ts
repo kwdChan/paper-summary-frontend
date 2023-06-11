@@ -27,6 +27,15 @@ class MySupabaseClient {
     return res
   }
 
+
+  updatePassword(password: string) {
+
+
+    return this.client.auth.updateUser({
+      password: password,
+    })
+  }
+
   signIn(email: string, password: string) {
     return this.client.auth.signInWithPassword({ email, password });
   }

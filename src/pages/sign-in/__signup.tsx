@@ -6,6 +6,24 @@ import { MyInputField, MyPasswordField } from "../../components/authMatters/MyIn
 import Link from "next/link";
 import { Divider } from "@/components/authMatters/Divider";
 import { SigninWithGoogleButton } from "@/components/authMatters/SigninWithGoogle";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 export default function Home() {
   const router = useRouter();
   const [password, setPassword] = useState<string>("");
