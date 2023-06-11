@@ -97,7 +97,7 @@ export function PasswordlessSiginField({
 
   return (
     <div className="w-full max-w-md flex flex-col items-center">
-      <div className="flex flex-row w-10/12 justify-between">
+      <div className="flex flex-row w-full justify-between">
         <MyStyledInput
           type="text"
           id={"email"}

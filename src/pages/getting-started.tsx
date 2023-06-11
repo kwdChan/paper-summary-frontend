@@ -46,12 +46,13 @@ function Paragraph({ children }: { children: React.ReactNode }) {
 function AlreadySignedIn() {
   const router = useRouter();
   return (
-    <div 
-    className="hover:ring-2 hover:cursor-pointer flex flex-col items-center ring-1 mt-4 text-blue-800 ring-slate-300 rounded-sm bg-blue-50 p-2 w-10/12 max-w-xs mx-auto"
-    role='button'
-    onClick={() => {router.push('/article')}}
+    <div
+      className="hover:ring-2 hover:cursor-pointer flex flex-col items-center ring-1 mt-4 text-blue-800 ring-slate-300 rounded-sm bg-blue-50 p-2 w-10/12 max-w-xs mx-auto"
+      role="button"
+      onClick={() => {
+        router.push("/article");
+      }}
     >
-    
       You are signed in!
     </div>
   );
@@ -59,10 +60,12 @@ function AlreadySignedIn() {
 
 function SigninSignupField() {
   return (
-    <div className="flex flex-col m-6 items-center ">
+    <div className="flex flex-col my-6 items-center  mx-2">
       <PasswordlessSiginField placeholder="Email address" />
       <div className="my-2"></div>
-      <Divider />
+
+      <div className="w-full max-w-md"><Divider /></div>
+      
 
       <SigninWithGoogleButton />
     </div>
@@ -93,8 +96,8 @@ export default function Page() {
         You will need an account to use this service. Simply put in your email
         address and we will send you a login link. Password is not required.
       </Paragraph>
-      <div className="m-8">
-      {signedIn ? <AlreadySignedIn /> : <SigninSignupField />}
+      <div className="my-8">
+        {signedIn ? <AlreadySignedIn /> : <SigninSignupField />}
       </div>
       <Title id="how_to_use">How to use</Title>
       <Paragraph>1. Highlight the text you want to summarise.</Paragraph>
@@ -109,7 +112,7 @@ export default function Page() {
       </Paragraph>
 
       <div className="flex flex-col items-center mt-5 bg-clip-content">
-        <video autoPlay muted loop className=" w-96 h-72">
+        <video autoPlay muted loop className="w-[700px] ring-1 ring-black ">
           <source src="/demo.mp4" type="video/mp4" />
           Your browser does not support HTML5 video.
         </video>
@@ -135,38 +138,39 @@ export default function Page() {
       </Subtitle>
       <ul className="list-decimal list-outside my-3 mx-10">
         <li className="my-3">
-          <b>Turn off the fullscreen mode.</b> The popup appears as a separated window so it may be hidden if you are
-          in the fullscreen mode
+          <b>Turn off the fullscreen mode.</b> The popup appears as a separated
+          window so it may be hidden if you are in the fullscreen mode
         </li>
         <li className="my-3">
-        <b>See if it is on another virtual desktop</b>. The popup will surface at its existing location if unclosed.
+          <b>See if it is on another virtual desktop</b>. The popup will surface
+          at its existing location if unclosed.
         </li>
         <li>
-          If none of that works, go to  <b> chrome://extensions</b> and reload the extension
+          If none of that works, go to <b> chrome://extensions</b> and reload
+          the extension
         </li>
-
       </ul>
-      <Subtitle> Issue: Slow response </Subtitle>
+      <Subtitle> Issue: Slow response or the OpenAI Error</Subtitle>
       <ul className="list-disc list-outside my-3 mx-10">
         <li className="my-3">
-          If you are experiencing slow response, it is likely that OpenAI is under heavy load. Please try again later.
+          If you get the OpenAI Error when the selected text is short, it is
+          likely that OpenAI is under heavy load. Please try again later.
         </li>
-        <li className="my-3">
-          Contact me if that happens too often.
-        </li>
+        <li className="my-3">Contact me if that happens too often.</li>
       </ul>
 
       <Subtitle> Issue: The text is too small </Subtitle>
       <ul className="list-disc list-outside my-3 mx-10">
         <li className="my-3">
-          Try &quot;ctrl-shift-=&quot; or &quot;cmd-shift-=&quot;.  You should be able to increase the text size like how you do it in a normal webpage. 
+          Try &quot;ctrl-shift-=&quot; or &quot;cmd-shift-=&quot;. You should be
+          able to increase the text size like how you do it in a normal webpage.
         </li>
-      </ul> 
+      </ul>
 
       <Title>Feedbacks</Title>
       <Paragraph>
-        If you have any other issues, suggestions or feature requests, feel free to
-        contact me on{" "}
+        If you have any other issues, suggestions or feature requests, feel free
+        to contact me on{" "}
         <a
           href="mailto:kwdaniel2020@gmail.com"
           className="text-blue-500 underline"
@@ -175,8 +179,7 @@ export default function Page() {
         </a>
       </Paragraph>
 
-      <PrivacyPolicyLink/>
-
+      <PrivacyPolicyLink />
 
       <WarningBox title={String(errorTitle || "")}>
         {String(errorMessage || "")}

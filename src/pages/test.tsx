@@ -22,7 +22,6 @@ export default function Page() {
   return (
     <div className="relative h-screen border-2">
       
-      <WarningBox>error</WarningBox>
       <button className="bg-gray-300 m-2 p-4  rounded-md" onClick={test}>
         Run
       </button>
