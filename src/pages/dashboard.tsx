@@ -4,6 +4,7 @@ import { supabaseClient } from "@/lib/supabaseClient";
 import { NavIcon } from "@/components/navIcon";
 import { UserInfo } from "@/lib/types";
 import Link from "next/link";
+import PrivacyPolicyLink from "@/components/theme/PrivacyPolicyLink";
 
 export default function Page() {
   const [userInfo, setUserInfo] = React.useState<UserInfo|null>(null);
@@ -53,9 +54,8 @@ export default function Page() {
 
       </div>
 
-      <div className="bottom-7 w-full text-center absolute text-sm text-blue-700 underline"> <Link href='./privacy'>Privacy Policy</Link></div>
 
-
+      <PrivacyPolicyLink/>
 
     </div>
   );

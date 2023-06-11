@@ -9,6 +9,7 @@ import { Divider } from "@/components/authMatters/Divider";
 import { SigninWithGoogleButton } from "@/components/authMatters/SigninWithGoogle";
 import { supabaseClient } from "@/lib/supabaseClient";
 import MarkdownRender from "@/components/theme/Markdowns";
+import PrivacyPolicyLink from "@/components/theme/PrivacyPolicyLink";
 
 function Title({
   id = "",
@@ -32,9 +33,9 @@ function Subtitle({
   children: React.ReactNode;
 }) {
   return (
-    <h1 id={id || undefined} className="text-lg mx-4 mt-5 mb-4">
+    <h2 id={id || undefined} className="text-lg mx-4 mt-5 mb-4 font-bold">
       {children}
-    </h1>
+    </h2>
   );
 }
 
@@ -43,8 +44,14 @@ function Paragraph({ children }: { children: React.ReactNode }) {
 }
 
 function AlreadySignedIn() {
+  const router = useRouter();
   return (
-    <div className="flex flex-col items-center ring-1 mt-4 text-blue-800 ring-slate-300 rounded-sm bg-blue-50 p-2 w-10/12 max-w-xs mx-auto">
+    <div 
+    className="hover:ring-2 hover:cursor-pointer flex flex-col items-center ring-1 mt-4 text-blue-800 ring-slate-300 rounded-sm bg-blue-50 p-2 w-10/12 max-w-xs mx-auto"
+    role='button'
+    onClick={() => {router.push('/article')}}
+    >
+    
       You are signed in!
     </div>
   );
@@ -86,11 +93,9 @@ export default function Page() {
         You will need an account to use this service. Simply put in your email
         address and we will send you a login link. Password is not required.
       </Paragraph>
-
+      <div className="m-8">
       {signedIn ? <AlreadySignedIn /> : <SigninSignupField />}
-
-      <div className="m-5"></div>
-
+      </div>
       <Title id="how_to_use">How to use</Title>
       <Paragraph>1. Highlight the text you want to summarise.</Paragraph>
       <Paragraph>
@@ -130,18 +135,18 @@ export default function Page() {
       </Subtitle>
       <ul className="list-decimal list-outside my-3 mx-10">
         <li className="my-3">
-          Turn off the fullscreen mode. The popup appears as a separated window so it may be hidden if you are
+          <b>Turn off the fullscreen mode.</b> The popup appears as a separated window so it may be hidden if you are
           in the fullscreen mode
         </li>
         <li className="my-3">
-          See if it is on another virtual desktop. The popup will surface at its existing location if unclosed.
+        <b>See if it is on another virtual desktop</b>. The popup will surface at its existing location if unclosed.
         </li>
         <li>
           If none of that works, go to  <b> chrome://extensions</b> and reload the extension
         </li>
 
       </ul>
-      <Subtitle> Issue 2: Slow response </Subtitle>
+      <Subtitle> Issue: Slow response </Subtitle>
       <ul className="list-disc list-outside my-3 mx-10">
         <li className="my-3">
           If you are experiencing slow response, it is likely that OpenAI is under heavy load. Please try again later.
@@ -151,7 +156,7 @@ export default function Page() {
         </li>
       </ul>
 
-      <Subtitle> Issue 3: The text is too small </Subtitle>
+      <Subtitle> Issue: The text is too small </Subtitle>
       <ul className="list-disc list-outside my-3 mx-10">
         <li className="my-3">
           Try &quot;ctrl-shift-=&quot; or &quot;cmd-shift-=&quot;.  You should be able to increase the text size like how you do it in a normal webpage. 
@@ -169,6 +174,10 @@ export default function Page() {
           kwdaniel2020@gmail.com
         </a>
       </Paragraph>
+
+      <PrivacyPolicyLink/>
+
+
       <WarningBox title={String(errorTitle || "")}>
         {String(errorMessage || "")}
       </WarningBox>
