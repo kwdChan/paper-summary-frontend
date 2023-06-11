@@ -66,7 +66,6 @@ function SigninSignupField() {
 
       <div className="w-full max-w-md"><Divider /></div>
       
-
       <SigninWithGoogleButton />
     </div>
   );
