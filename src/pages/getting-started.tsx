@@ -10,7 +10,7 @@ import { SigninWithGoogleButton } from "@/components/authMatters/SigninWithGoogl
 import { supabaseClient } from "@/lib/supabaseClient";
 import MarkdownRender from "@/components/theme/Markdowns";
 import PrivacyPolicyLink from "@/components/theme/PrivacyPolicyLink";
-
+const DEMO_VIDEO_URL = process.env.NEXT_PUBLIC_DEMO_VIDEO_URL;
 function Title({
   id = "",
   children,
@@ -112,7 +112,7 @@ export default function Page() {
 
       <div className="flex flex-col items-center mt-5 bg-clip-content">
         <video autoPlay muted loop className="w-[700px] ring-1 ring-black ">
-          <source src="/demo.mp4" type="video/mp4" />
+          <source src={DEMO_VIDEO_URL} type="video/mp4" />
           Your browser does not support HTML5 video.
         </video>
       </div>
