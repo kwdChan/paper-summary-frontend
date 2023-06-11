@@ -99,16 +99,22 @@ export default function Page() {
         {signedIn ? <AlreadySignedIn /> : <SigninSignupField />}
       </div>
       <Title id="how_to_use">How to use</Title>
-      <Paragraph>1. Highlight the text you want to summarise.</Paragraph>
-      <Paragraph>
+
+      <ul className="list-decimal list-outside my-3 mx-10">
+        <li className="my-3">
+        Highlight the text you want to summarise
+        </li>
+        <li className="my-3">
         {
-          "2. Activate the extension by right clicking and select 'Summarise the selected'."
+          "Activate the extension by right click and select 'Summarise the selected'."
         }
-      </Paragraph>
-      <Paragraph>
-        3. A popup will appear and you can select how you would like the
+        </li>
+        <li>
+        A popup will appear and you can select how you would like the
         selected to be summarised.
-      </Paragraph>
+        </li>
+      </ul>
+      
 
       <div className="flex flex-col items-center mt-5 bg-clip-content">
         <video autoPlay muted loop className="w-[700px] ring-1 ring-black ">
@@ -120,14 +126,25 @@ export default function Page() {
       <div className="m-5"></div>
 
       <Paragraph>
-        Note that the page may need to be reloaded, if it is opened before this
-        extension is installed.
+        You can also set up a keyboard shortcut to trigger the action. Enter this
+        link: <b> chrome://extensions/shortcuts</b> to your URL bar.{" "}
       </Paragraph>
 
-      <Paragraph>
-        You can set up a keyboard shortcut to trigger the action by enter this
-        link: <b> chrome://extensions/shortcuts</b> to the URL bar.{" "}
-      </Paragraph>
+
+      <Subtitle>
+        Catches
+      </Subtitle>
+      <ul className="list-disc list-outside my-3 mx-10">
+        <li className="my-3">
+        If the page is opened before this extension is installed, it may need to be reloaded.
+        </li>
+        
+        <li>
+          Only webpages are supported. PDFs and other non-html documents are not supported.
+        </li>
+      </ul>
+
+
 
       <div className="m-5"></div>
 
