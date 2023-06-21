@@ -99,7 +99,8 @@ class MySupabaseClient {
     };
     handleChanges({});
 
-    this.client
+    this.getSession().then(()=>{
+      this.client
       .channel("any")
       .on(
         "postgres_changes",
@@ -112,6 +113,7 @@ class MySupabaseClient {
         handleChanges,
       )
       .subscribe();
+    })
   }
 
   getHighlights(article_digest: string) {
@@ -144,8 +146,9 @@ class MySupabaseClient {
       );
     };
     handleChanges({});
+    this.getSession().then(()=>{
 
-    this.client
+      this.client
       .channel("any")
       .on(
         "postgres_changes",
@@ -158,6 +161,7 @@ class MySupabaseClient {
         handleChanges,
       )
       .subscribe();
+    })
   }
 
   monitorArticleList(setArticleList: Dispatch<SetStateAction<Article[]>>) {
