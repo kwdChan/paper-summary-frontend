@@ -50,7 +50,7 @@ This project is split across three repositories reflecting its multi-service arc
 |------|---------|-------|
 | [`paper-summary-chrome`](https://github.com/kwdChan/paper-summary-chrome/) | Chrome extension | TypeScript, Webpack, Chrome Extensions API |
 | [`paper-summary-frontend`](.) | Web UI (this repo) | TypeScript, Next.js on Vercel |
-| [`paper-summary-functions`](https://github.com/kwdChan/paper-summary-functions) | Serverless API & prompt logic | Supabase Edge Functions, SQL Functions|
+| [`paper-summary-functions`](https://github.com/kwdChan/paper-summary-functions) | Serverless API & prompt logic | TypeScript, Supabase Edge Functions, Deno|
 
 > The Chrome extension retrieves the login session from the web UI and sends the selected text to the backend via API calls. The web UI and backend then handle the rest - receiving the summarisation requests from the users, making the OpenAI API calls and displaying the result. 
 
@@ -61,8 +61,8 @@ This project is split across three repositories reflecting its multi-service arc
 
 | Component | Technology |
 |-------|-----------|
-| Extension | TypeScript, Webpack, Chrome Extensions API (Manifest V3) |
-| Frontend | TypeScript, Next.js on Vercel |
+| Browser Extension | TypeScript, Webpack, Chrome Extensions API (Manifest V3) |
+| Web UI | TypeScript, Next.js on Vercel |
 | Backend | Supabase (PostgreSQL, Edge Functions) |
 | Auth | Supabase Auth - passwordless & password-based |
 | AI | OpenAI GPT API |
