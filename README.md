@@ -17,7 +17,7 @@ Two problems were clear: the model didn't know what to extract, and feeding it t
 
 These insights shaped Review Express. Highlight only the relevant passage, then tell the model exactly what to extract. The summary modes exist because "summarise this" is rarely the right instruction.
 
-The project was published on the Chrome Web Store before being deprecated. The codebase remains here as a portfolio piece.
+The project was published on the [Chrome Web Store](https://chromewebstore.google.com/detail/review-express/bdmdngoamjhncjgclcfppjjgfihdgbfp) before being deprecated. The codebase remains here as a portfolio piece.
 
 
 ---
